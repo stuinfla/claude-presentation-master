@@ -20,7 +20,8 @@
     "lint:fix": "eslint src/**/*.ts --fix",
     "format": "prettier --write \"src/**/*.ts\"",
     "typecheck": "tsc --noEmit",
-    "prepublishOnly": "npm run build && npm test",
+    "sync-knowledge": "bash scripts/sync-knowledge.sh",
+    "prepublishOnly": "npm run sync-knowledge && npm run build && npm test",
     "qa": "node bin/cli.js validate"
   },
   "keywords": [
