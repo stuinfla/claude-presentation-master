@@ -2,16 +2,16 @@
 
 <div align="center">
 
-![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)
+![NPM Version](https://img.shields.io/npm/v/claude-presentation-master)
 ![Node](https://img.shields.io/badge/node-%3E%3D18.0.0-green.svg)
 ![License](https://img.shields.io/badge/license-MIT-brightgreen.svg)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.3-blue.svg)
 
-**Generate world-class presentations using expert methodologies from the world's best presentation coaches.**
+**Stop making mediocre presentations. Start making presentations that actually work.**
 
 [Installation](#installation) •
 [Quick Start](#quick-start) •
-[Documentation](#documentation) •
+[Why This Exists](#why-this-exists) •
 [Examples](#examples) •
 [API Reference](#api-reference)
 
@@ -19,9 +19,23 @@
 
 ---
 
+## Why This Exists
+
+**Most presentations are terrible.** Death by bullet points. Walls of text. Zero visual impact.
+
+The irony? We know how to make great presentations. Nancy Duarte, Garr Reynolds, Carmine Gallo, Chris Anderson—these experts have written bestselling books with clear, proven methodologies. TED talks follow specific patterns. Steve Jobs' keynotes weren't accidents.
+
+**The problem:** Nobody has time to read 10 books and manually apply 40+ expert principles to every slide.
+
+**The solution:** This library encodes all of those expert methodologies into code. It analyzes your content, structures it using proven frameworks (Sparkline, SCQA, Rule of Three), generates slides that follow strict design rules, and then **actually validates the visual output** using Playwright screenshots.
+
+No AI hallucination. No generic templates. Just 6,300+ lines of encoded expert knowledge that ensures every presentation meets a 95/100 quality bar—or it tells you exactly what to fix.
+
+---
+
 ## What is Claude Presentation Master?
 
-Claude Presentation Master is a TypeScript/Node.js library that transforms your content into professionally designed presentations. Unlike simple slide generators, it applies proven methodologies from world-renowned presentation experts:
+A TypeScript/Node.js library that transforms your content into professionally designed presentations. It applies proven methodologies from world-renowned presentation experts:
 
 - **Nancy Duarte** (Slide:ology, Resonate) - Sparkline narrative structure, STAR moments
 - **Garr Reynolds** (Presentation Zen) - Signal-to-noise ratio, visual simplicity
