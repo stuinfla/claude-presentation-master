@@ -1,0 +1,99 @@
+{
+  "name": "claude-presentation-master",
+  "version": "1.0.1",
+  "description": "Generate world-class presentations using expert methodologies from Duarte, Reynolds, Gallo, and Anderson. Enforces rigorous quality standards through real visual validation.",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "bin": {
+    "claude-presentation-master": "./bin/cli.js",
+    "cpm": "./bin/cli.js"
+  },
+  "scripts": {
+    "build": "tsup src/index.ts --format cjs,esm --dts --clean",
+    "dev": "tsup src/index.ts --format cjs,esm --dts --watch",
+    "test": "jest --passWithNoTests",
+    "test:watch": "jest --watch",
+    "test:visual": "jest tests/visual",
+    "test:coverage": "jest --coverage",
+    "lint": "eslint src/**/*.ts",
+    "lint:fix": "eslint src/**/*.ts --fix",
+    "format": "prettier --write \"src/**/*.ts\"",
+    "typecheck": "tsc --noEmit",
+    "prepublishOnly": "npm run build && npm test",
+    "qa": "node bin/cli.js validate"
+  },
+  "keywords": [
+    "presentation",
+    "slides",
+    "powerpoint",
+    "pptx",
+    "reveal.js",
+    "html-presentation",
+    "duarte",
+    "reynolds",
+    "gallo",
+    "ted-talk",
+    "keynote",
+    "business-presentation",
+    "qa-validation",
+    "expert-methodologies",
+    "visual-regression",
+    "accessibility"
+  ],
+  "author": "Stuart Kerr <stuart@isovision.ai>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Stuinfla/claude-presentation-master"
+  },
+  "homepage": "https://github.com/Stuinfla/claude-presentation-master#readme",
+  "bugs": {
+    "url": "https://github.com/Stuinfla/claude-presentation-master/issues"
+  },
+  "files": [
+    "dist",
+    "bin",
+    "assets"
+  ],
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "chalk": "^5.3.0",
+    "color": "^4.2.3",
+    "handlebars": "^4.7.8",
+    "lodash": "^4.17.21",
+    "marked": "^11.0.0",
+    "natural": "^6.10.0",
+    "playwright": "^1.40.0",
+    "pptxgenjs": "^3.12.0",
+    "wcag-contrast": "^3.0.0",
+    "yaml": "^2.3.4"
+  },
+  "devDependencies": {
+    "@types/color": "^3.0.6",
+    "@types/fs-extra": "^11.0.4",
+    "@types/jest": "^29.5.11",
+    "@types/js-yaml": "^4.0.9",
+    "@types/lodash": "^4.14.202",
+    "@types/node": "^20.10.0",
+    "@typescript-eslint/eslint-plugin": "^6.15.0",
+    "@typescript-eslint/parser": "^6.15.0",
+    "eslint": "^8.56.0",
+    "jest": "^29.7.0",
+    "jest-image-snapshot": "^6.4.0",
+    "prettier": "^3.1.1",
+    "ts-jest": "^29.1.1",
+    "tsup": "^8.0.1",
+    "typescript": "^5.3.3"
+  },
+  "peerDependencies": {
+    "typescript": ">=5.0.0"
+  },
+  "peerDependenciesMeta": {
+    "typescript": {
+      "optional": true
+    }
+  }
+}

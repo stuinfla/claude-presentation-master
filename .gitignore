@@ -1,0 +1,39 @@
+# Dependencies
+node_modules/
+
+# Build output (optional - we include dist for convenience)
+# dist/
+
+# Environment and secrets
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+
+# Test coverage
+coverage/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Temp files
+*.tmp
+*.temp
+.cache/
+
+# Claude/Swarm internal files (not needed for package users)
+.claude-flow/
+.swarm/
+memory/
+
+# OS files
+Thumbs.db

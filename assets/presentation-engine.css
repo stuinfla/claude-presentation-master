@@ -1,0 +1,3057 @@
+/**
+ * Claude Presentation Master - CSS Component Library
+ * Version: 2.0.0
+ *
+ * A world-class CSS framework for creating stunning HTML presentations
+ * Built for Reveal.js with center: false for full layout control
+ *
+ * Part of the claude-presentation-master NPM package
+ *
+ * Author: Stuart Kerr, Isovision.ai
+ * License: MIT
+ */
+
+/* ==========================================================================
+   CSS CUSTOM PROPERTIES - THEMING SYSTEM
+   ========================================================================== */
+
+:root {
+  /* Color Palettes - Default Dark Executive Theme */
+  --color-primary: #3b82f6;
+  --color-primary-dark: #2563eb;
+  --color-primary-light: #60a5fa;
+  --color-secondary: #8b5cf6;
+  --color-accent: #f59e0b;
+  --color-success: #10b981;
+  --color-warning: #f59e0b;
+  --color-error: #ef4444;
+
+  /* Neutral Colors */
+  --color-bg-primary: #0f172a;
+  --color-bg-secondary: #1e293b;
+  --color-bg-tertiary: #334155;
+  --color-bg-overlay: rgba(15, 23, 42, 0.95);
+
+  --color-text-primary: #f8fafc;
+  --color-text-secondary: #cbd5e1;
+  --color-text-tertiary: #94a3b8;
+  --color-text-inverse: #0f172a;
+
+  --color-border: #334155;
+  --color-border-light: #475569;
+
+  /* Typography Scale - Responsive using clamp() */
+  --font-size-xs: clamp(0.75rem, 0.7rem + 0.25vw, 0.875rem);
+  --font-size-sm: clamp(0.875rem, 0.8rem + 0.35vw, 1rem);
+  --font-size-base: clamp(1rem, 0.9rem + 0.5vw, 1.125rem);
+  --font-size-lg: clamp(1.125rem, 1rem + 0.625vw, 1.25rem);
+  --font-size-xl: clamp(1.25rem, 1.1rem + 0.75vw, 1.5rem);
+  --font-size-2xl: clamp(1.5rem, 1.3rem + 1vw, 1.875rem);
+  --font-size-3xl: clamp(1.875rem, 1.6rem + 1.375vw, 2.25rem);
+  --font-size-4xl: clamp(2.25rem, 1.9rem + 1.75vw, 3rem);
+  --font-size-5xl: clamp(3rem, 2.5rem + 2.5vw, 4rem);
+  --font-size-6xl: clamp(3.75rem, 3rem + 3.75vw, 5rem);
+  --font-size-7xl: clamp(4.5rem, 3.5rem + 5vw, 6rem);
+
+  /* Font Families - Professional Typography (NOT Inter) */
+  /* Headings: Source Sans Pro - Clean, professional, highly legible */
+  /* Body: System fonts for optimal performance and native feel */
+  --font-heading: 'Source Sans Pro', 'Helvetica Neue', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-body: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', 'Monaco', 'Courier New', monospace;
+
+  /* Alternative Font Stacks for Different Brand Personalities */
+  /* Modern Tech: --font-heading: 'Space Grotesk', 'DM Sans', sans-serif; */
+  /* Corporate: --font-heading: 'IBM Plex Sans', 'Roboto', sans-serif; */
+  /* Creative: --font-heading: 'Poppins', 'Montserrat', sans-serif; */
+  /* Editorial: --font-heading: 'Playfair Display', 'Merriweather', serif; */
+
+  /* Font Weights */
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --font-weight-black: 900;
+
+  /* Line Heights */
+  --line-height-tight: 1.2;
+  --line-height-snug: 1.375;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.625;
+  --line-height-loose: 2;
+
+  /* Spacing Scale */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  --space-20: 5rem;
+  --space-24: 6rem;
+
+  /* Border Radius */
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-2xl: 1.5rem;
+  --radius-full: 9999px;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+  --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+
+  /* Transitions */
+  --transition-fast: 150ms ease-in-out;
+  --transition-base: 300ms ease-in-out;
+  --transition-slow: 500ms ease-in-out;
+
+  /* Safe Areas */
+  --safe-area-top: env(safe-area-inset-top, 0px);
+  --safe-area-right: env(safe-area-inset-right, 0px);
+  --safe-area-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-area-left: env(safe-area-inset-left, 0px);
+
+  /* Slide Padding */
+  --slide-padding-x: clamp(2rem, 5vw, 4rem);
+  --slide-padding-y: clamp(2rem, 5vh, 3rem);
+}
+
+/* Theme Variants */
+[data-theme="light-corporate"] {
+  --color-primary: #2563eb;
+  --color-primary-dark: #1d4ed8;
+  --color-primary-light: #3b82f6;
+  --color-secondary: #7c3aed;
+  --color-accent: #0891b2;
+
+  --color-bg-primary: #ffffff;
+  --color-bg-secondary: #f8fafc;
+  --color-bg-tertiary: #e2e8f0;
+  --color-bg-overlay: rgba(255, 255, 255, 0.95);
+
+  --color-text-primary: #0f172a;
+  --color-text-secondary: #475569;
+  --color-text-tertiary: #64748b;
+  --color-text-inverse: #ffffff;
+
+  --color-border: #e2e8f0;
+  --color-border-light: #cbd5e1;
+}
+
+[data-theme="modern-tech"] {
+  --color-primary: #06b6d4;
+  --color-primary-dark: #0891b2;
+  --color-primary-light: #22d3ee;
+  --color-secondary: #a855f7;
+  --color-accent: #ec4899;
+
+  --color-bg-primary: #09090b;
+  --color-bg-secondary: #18181b;
+  --color-bg-tertiary: #27272a;
+  --color-bg-overlay: rgba(9, 9, 11, 0.95);
+
+  --color-text-primary: #fafafa;
+  --color-text-secondary: #d4d4d8;
+  --color-text-tertiary: #a1a1aa;
+  --color-text-inverse: #09090b;
+
+  --color-border: #3f3f46;
+  --color-border-light: #52525b;
+}
+
+[data-theme="minimal"] {
+  --color-primary: #000000;
+  --color-primary-dark: #000000;
+  --color-primary-light: #404040;
+  --color-secondary: #737373;
+  --color-accent: #dc2626;
+
+  --color-bg-primary: #ffffff;
+  --color-bg-secondary: #fafafa;
+  --color-bg-tertiary: #f5f5f5;
+  --color-bg-overlay: rgba(255, 255, 255, 0.95);
+
+  --color-text-primary: #000000;
+  --color-text-secondary: #525252;
+  --color-text-tertiary: #737373;
+  --color-text-inverse: #ffffff;
+
+  --color-border: #e5e5e5;
+  --color-border-light: #d4d4d4;
+}
+
+[data-theme="warm"] {
+  --color-primary: #ea580c;
+  --color-primary-dark: #c2410c;
+  --color-primary-light: #f97316;
+  --color-secondary: #dc2626;
+  --color-accent: #facc15;
+
+  --color-bg-primary: #292524;
+  --color-bg-secondary: #44403c;
+  --color-bg-tertiary: #57534e;
+  --color-bg-overlay: rgba(41, 37, 36, 0.95);
+
+  --color-text-primary: #fafaf9;
+  --color-text-secondary: #e7e5e4;
+  --color-text-tertiary: #d6d3d1;
+  --color-text-inverse: #292524;
+
+  --color-border: #57534e;
+  --color-border-light: #78716c;
+}
+
+[data-theme="creative"] {
+  --color-primary: #ec4899;
+  --color-primary-dark: #db2777;
+  --color-primary-light: #f472b6;
+  --color-secondary: #8b5cf6;
+  --color-accent: #f59e0b;
+
+  --color-bg-primary: #1e1b4b;
+  --color-bg-secondary: #312e81;
+  --color-bg-tertiary: #3730a3;
+  --color-bg-overlay: rgba(30, 27, 75, 0.95);
+
+  --color-text-primary: #faf5ff;
+  --color-text-secondary: #e9d5ff;
+  --color-text-tertiary: #d8b4fe;
+  --color-text-inverse: #1e1b4b;
+
+  --color-border: #4c1d95;
+  --color-border-light: #6d28d9;
+}
+
+/* ==========================================================================
+   BASE REVEAL.JS OVERRIDES
+   ========================================================================== */
+
+.reveal {
+  font-family: var(--font-body);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-normal);
+  color: var(--color-text-primary);
+}
+
+.reveal .slides {
+  text-align: left !important;
+}
+
+.reveal .slides section {
+  height: 100% !important;
+  padding: var(--slide-padding-y) var(--slide-padding-x) !important;
+  padding-top: calc(var(--slide-padding-y) + var(--safe-area-top)) !important;
+  padding-right: calc(var(--slide-padding-x) + var(--safe-area-right)) !important;
+  padding-bottom: calc(var(--slide-padding-y) + var(--safe-area-bottom)) !important;
+  padding-left: calc(var(--slide-padding-x) + var(--safe-area-left)) !important;
+  box-sizing: border-box;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: flex-start !important;
+  align-items: stretch !important;
+  background: var(--color-bg-primary);
+}
+
+.reveal h1,
+.reveal h2,
+.reveal h3,
+.reveal h4,
+.reveal h5,
+.reveal h6 {
+  font-family: var(--font-heading);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-tight);
+  color: var(--color-text-primary);
+  margin: 0 0 var(--space-6) 0;
+  text-transform: none;
+}
+
+.reveal h1 { font-size: var(--font-size-5xl); }
+.reveal h2 { font-size: var(--font-size-4xl); }
+.reveal h3 { font-size: var(--font-size-3xl); }
+.reveal h4 { font-size: var(--font-size-2xl); }
+
+.reveal p {
+  margin: 0 0 var(--space-4) 0;
+  line-height: var(--line-height-relaxed);
+}
+
+.reveal a {
+  color: var(--color-primary);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+.reveal a:hover {
+  color: var(--color-primary-light);
+}
+
+.reveal strong {
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+}
+
+.reveal em {
+  font-style: italic;
+  color: var(--color-text-secondary);
+}
+
+.reveal code {
+  font-family: var(--font-mono);
+  background: var(--color-bg-tertiary);
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-sm);
+  font-size: 0.9em;
+}
+
+.reveal pre {
+  margin: var(--space-6) 0;
+  background: var(--color-bg-secondary);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  overflow-x: auto;
+}
+
+.reveal pre code {
+  background: transparent;
+  padding: 0;
+}
+
+.reveal ul,
+.reveal ol {
+  margin: 0 0 var(--space-6) 0;
+  padding-left: var(--space-8);
+}
+
+.reveal li {
+  margin-bottom: var(--space-3);
+  line-height: var(--line-height-relaxed);
+}
+
+.reveal img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* ==========================================================================
+   SLIDE TYPE: TITLE SLIDE
+   ========================================================================== */
+
+/*
+  Usage:
+  <section class="slide-title">
+    <div class="title-content">
+      <span class="badge">Quarterly Review</span>
+      <h1>Revolutionizing Customer Experience</h1>
+      <p class="subtitle">Q4 2024 Strategic Insights</p>
+    </div>
+    <div class="title-footer">
+      <p>Presented by Sarah Johnson | December 5, 2024</p>
+    </div>
+  </section>
+*/
+
+.reveal .slides section.slide-title {
+  background: linear-gradient(135deg, var(--color-bg-primary) 0%, var(--color-bg-secondary) 100%);
+  justify-content: center !important;
+  align-items: center !important;
+  text-align: center !important;
+  position: relative;
+  overflow: hidden;
+}
+
+.reveal .slides section.slide-title::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at top right, var(--color-primary) 0%, transparent 50%);
+  opacity: 0.1;
+  pointer-events: none;
+}
+
+.reveal .slides section.slide-title .title-content {
+  position: relative;
+  z-index: 1;
+  max-width: 900px;
+}
+
+.reveal .slides section.slide-title h1 {
+  font-size: var(--font-size-7xl);
+  font-weight: var(--font-weight-black);
+  margin-bottom: var(--space-6);
+  background: linear-gradient(135deg, var(--color-text-primary) 0%, var(--color-text-secondary) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.reveal .slides section.slide-title .subtitle {
+  font-size: var(--font-size-2xl);
+  color: var(--color-text-secondary);
+  font-weight: var(--font-weight-medium);
+  margin-bottom: var(--space-8);
+}
+
+.reveal .slides section.slide-title .title-footer {
+  position: absolute;
+  bottom: var(--slide-padding-y);
+  left: var(--slide-padding-x);
+  right: var(--slide-padding-x);
+  text-align: center;
+  color: var(--color-text-tertiary);
+  font-size: var(--font-size-sm);
+}
+
+/* ==========================================================================
+   SLIDE TYPE: STATEMENT SLIDE
+   ========================================================================== */
+
+/*
+  Usage:
+  <section class="slide-statement">
+    <div class="statement-content">
+      <h2>Our customers are 10x more engaged than industry average</h2>
+    </div>
+  </section>
+*/
+
+.reveal .slides section.slide-statement {
+  justify-content: center !important;
+  align-items: center !important;
+}
+
+.reveal .slides section.slide-statement .statement-content {
+  max-width: 1000px;
+  text-align: center;
+}
+
+.reveal .slides section.slide-statement h2 {
+  font-size: var(--font-size-6xl);
+  font-weight: var(--font-weight-black);
+  line-height: var(--line-height-tight);
+  margin: 0;
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ==========================================================================
+   SLIDE TYPE: BIG NUMBER
+   ========================================================================== */
+
+/*
+  Usage:
+  <section class="slide-big-number">
+    <div class="big-number-content">
+      <div class="number">847%</div>
+      <h3>Revenue Growth</h3>
+      <p>Year-over-year increase in Q4 2024, driven by enterprise adoption and product expansion</p>
+    </div>
+  </section>
+*/
+
+.reveal .slides section.slide-big-number {
+  justify-content: center !important;
+  align-items: center !important;
+}
+
+.reveal .slides section.slide-big-number .big-number-content {
+  text-align: center;
+  max-width: 800px;
+}
+
+.reveal .slides section.slide-big-number .number {
+  font-size: var(--font-size-7xl);
+  font-weight: var(--font-weight-black);
+  line-height: 1;
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: var(--space-6);
+  display: block;
+}
+
+.reveal .slides section.slide-big-number h3 {
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-bold);
+  margin-bottom: var(--space-6);
+}
+
+.reveal .slides section.slide-big-number p {
+  font-size: var(--font-size-xl);
+  color: var(--color-text-secondary);
+  line-height: var(--line-height-relaxed);
+}
+
+/* ==========================================================================
+   SLIDE TYPE: SCREENSHOT (SIDE-BY-SIDE)
+   ========================================================================== */
+
+/*
+  Usage:
+  <section class="slide-screenshot slide-screenshot-left">
+    <div class="screenshot-container">
+      <div class="screenshot-image">
+        <div class="browser-frame">
+          <img src="dashboard.png" alt="Dashboard Screenshot">
+        </div>
+      </div>
+      <div class="screenshot-content">
+        <span class="badge">New Feature</span>
+        <h2>Real-Time Analytics Dashboard</h2>
+        <p>Track key metrics as they happen with our new real-time dashboard.</p>
+        <ul>
+          <li>Live data updates every second</li>
+          <li>Customizable widgets</li>
+          <li>Export to PDF/CSV</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+*/
+
+.reveal .slides section.slide-screenshot {
+  padding: var(--slide-padding-y) var(--slide-padding-x) !important;
+}
+
+.reveal .slides section.slide-screenshot .screenshot-container {
+  display: flex !important;
+  flex-direction: row !important;
+  gap: var(--space-12);
+  align-items: center !important;
+  height: 100%;
+  width: 100%;
+}
+
+.reveal .slides section.slide-screenshot .screenshot-image {
+  flex: 1 1 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.reveal .slides section.slide-screenshot .screenshot-content {
+  flex: 1 1 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* Screenshot Left Variant */
+.reveal .slides section.slide-screenshot-left .screenshot-container {
+  flex-direction: row !important;
+}
+
+/* Screenshot Right Variant */
+.reveal .slides section.slide-screenshot-right .screenshot-container {
+  flex-direction: row-reverse !important;
+}
+
+.reveal .slides section.slide-screenshot h2 {
+  font-size: var(--font-size-4xl);
+  margin-bottom: var(--space-4);
+}
+
+.reveal .slides section.slide-screenshot p {
+  font-size: var(--font-size-lg);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-6);
+}
+
+.reveal .slides section.slide-screenshot ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.reveal .slides section.slide-screenshot li {
+  font-size: var(--font-size-base);
+  color: var(--color-text-secondary);
+  padding-left: var(--space-8);
+  position: relative;
+  margin-bottom: var(--space-3);
+}
+
+.reveal .slides section.slide-screenshot li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  color: var(--color-success);
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-lg);
+}
+
+/* ==========================================================================
+   SLIDE TYPE: TWO COLUMN
+   ========================================================================== */
+
+/*
+  Usage:
+  <section class="slide-two-column">
+    <h2>Key Challenges & Solutions</h2>
+    <div class="two-column-container">
+      <div class="column">
+        <h3>Challenges</h3>
+        <ul>
+          <li>Legacy infrastructure</li>
+          <li>Data silos</li>
+          <li>Slow deployment</li>
+        </ul>
+      </div>
+      <div class="column">
+        <h3>Solutions</h3>
+        <ul>
+          <li>Cloud migration</li>
+          <li>Unified data platform</li>
+          <li>CI/CD automation</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+*/
+
+.reveal .slides section.slide-two-column .two-column-container {
+  display: flex !important;
+  flex-direction: row !important;
+  gap: var(--space-12);
+  flex: 1;
+  align-items: flex-start !important;
+}
+
+.reveal .slides section.slide-two-column .column {
+  flex: 1 1 50%;
+}
+
+.reveal .slides section.slide-two-column h3 {
+  font-size: var(--font-size-2xl);
+  margin-bottom: var(--space-6);
+  padding-bottom: var(--space-4);
+  border-bottom: 3px solid var(--color-primary);
+}
+
+/* ==========================================================================
+   SLIDE TYPE: THREE COLUMN
+   ========================================================================== */
+
+/*
+  Usage:
+  <section class="slide-three-column">
+    <h2>Our Three-Pillar Strategy</h2>
+    <div class="three-column-container">
+      <div class="column">
+        <div class="icon-box">🎯</div>
+        <h3>Focus</h3>
+        <p>Concentrate on core strengths</p>
+      </div>
+      <div class="column">
+        <div class="icon-box">⚡</div>
+        <h3>Speed</h3>
+        <p>Accelerate time to market</p>
+      </div>
+      <div class="column">
+        <div class="icon-box">🚀</div>
+        <h3>Scale</h3>
+        <p>Expand global footprint</p>
+      </div>
+    </div>
+  </section>
+*/
+
+.reveal .slides section.slide-three-column .three-column-container {
+  display: flex !important;
+  flex-direction: row !important;
+  gap: var(--space-8);
+  flex: 1;
+  align-items: flex-start !important;
+}
+
+.reveal .slides section.slide-three-column .column {
+  flex: 1 1 33.333%;
+  text-align: center;
+}
+
+.reveal .slides section.slide-three-column h3 {
+  font-size: var(--font-size-2xl);
+  margin-bottom: var(--space-4);
+}
+
+.reveal .slides section.slide-three-column p {
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-lg);
+}
+
+/* ==========================================================================
+   SLIDE TYPE: FOUR COLUMN
+   ========================================================================== */
+
+/*
+  Usage:
+  <section class="slide-four-column">
+    <h2>Q4 Key Metrics</h2>
+    <div class="four-column-container">
+      <div class="column">
+        <div class="metric">
+          <div class="metric-value">1.2M</div>
+          <div class="metric-label">Active Users</div>
+        </div>
+      </div>
+      <div class="column">
+        <div class="metric">
+          <div class="metric-value">98.7%</div>
+          <div class="metric-label">Uptime</div>
+        </div>
+      </div>
+      <div class="column">
+        <div class="metric">
+          <div class="metric-value">$12M</div>
+          <div class="metric-label">ARR</div>
+        </div>
+      </div>
+      <div class="column">
+        <div class="metric">
+          <div class="metric-value">4.9/5</div>
+          <div class="metric-label">Customer Rating</div>
+        </div>
+      </div>
+    </div>
+  </section>
+*/
+
+.reveal .slides section.slide-four-column .four-column-container {
+  display: flex !important;
+  flex-direction: row !important;
+  gap: var(--space-6);
+  flex: 1;
+  align-items: center !important;
+}
+
+.reveal .slides section.slide-four-column .column {
+  flex: 1 1 25%;
+}
+
+/* ==========================================================================
+   SLIDE TYPE: COMPARISON
+   ========================================================================== */
+
+/*
+  Usage:
+  <section class="slide-comparison">
+    <h2>Before vs After</h2>
+    <div class="comparison-container">
+      <div class="comparison-side before">
+        <h3>Before</h3>
+        <ul>
+          <li>Manual data entry</li>
+          <li>3-day turnaround</li>
+          <li>15% error rate</li>
+        </ul>
+      </div>
+      <div class="comparison-divider">→</div>
+      <div class="comparison-side after">
+        <h3>After</h3>
+        <ul>
+          <li>Automated workflows</li>
+          <li>Real-time processing</li>
+          <li>0.1% error rate</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+*/
+
+.reveal .slides section.slide-comparison .comparison-container {
+  display: flex !important;
+  flex-direction: row !important;
+  gap: var(--space-8);
+  align-items: center !important;
+  flex: 1;
+}
+
+.reveal .slides section.slide-comparison .comparison-side {
+  flex: 1 1 45%;
+  padding: var(--space-8);
+  background: var(--color-bg-secondary);
+  border-radius: var(--radius-xl);
+}
+
+.reveal .slides section.slide-comparison .comparison-side.before {
+  border: 2px solid var(--color-error);
+}
+
+.reveal .slides section.slide-comparison .comparison-side.after {
+  border: 2px solid var(--color-success);
+}
+
+.reveal .slides section.slide-comparison .comparison-divider {
+  font-size: var(--font-size-5xl);
+  font-weight: var(--font-weight-black);
+  color: var(--color-primary);
+  flex: 0 0 auto;
+}
+
+.reveal .slides section.slide-comparison h3 {
+  font-size: var(--font-size-2xl);
+  margin-bottom: var(--space-6);
+}
+
+/* ==========================================================================
+   SLIDE TYPE: QUOTE
+   ========================================================================== */
+
+/*
+  Usage:
+  <section class="slide-quote">
+    <div class="quote-container">
+      <blockquote>
+        "This platform has transformed how we operate. We've seen a 300% increase in productivity."
+      </blockquote>
+      <div class="quote-attribution">
+        <div class="avatar">
+          <img src="headshot.jpg" alt="Jane Doe">
+        </div>
+        <div class="quote-author">
+          <div class="author-name">Jane Doe</div>
+          <div class="author-title">CEO, Acme Corp</div>
+        </div>
+      </div>
+    </div>
+  </section>
+*/
+
+.reveal .slides section.slide-quote {
+  justify-content: center !important;
+  align-items: center !important;
+}
+
+.reveal .slides section.slide-quote .quote-container {
+  max-width: 900px;
+  text-align: center;
+}
+
+.reveal .slides section.slide-quote blockquote {
+  font-size: var(--font-size-4xl);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--line-height-snug);
+  color: var(--color-text-primary);
+  margin: 0 0 var(--space-12) 0;
+  position: relative;
+  padding: 0;
+  border: none;
+}
+
+.reveal .slides section.slide-quote blockquote::before {
+  content: '"';
+  font-size: var(--font-size-7xl);
+  color: var(--color-primary);
+  opacity: 0.3;
+  position: absolute;
+  top: -0.3em;
+  left: -0.5em;
+  font-family: Georgia, serif;
+}
+
+.reveal .slides section.slide-quote .quote-attribution {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-4);
+}
+
+.reveal .slides section.slide-quote .quote-author {
+  text-align: left;
+}
+
+.reveal .slides section.slide-quote .author-name {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+}
+
+.reveal .slides section.slide-quote .author-title {
+  font-size: var(--font-size-base);
+  color: var(--color-text-tertiary);
+}
+
+/* ==========================================================================
+   SLIDE TYPE: TIMELINE
+   ========================================================================== */
+
+/*
+  Usage:
+  <section class="slide-timeline">
+    <h2>Product Roadmap 2025</h2>
+    <div class="timeline-container">
+      <div class="timeline-item">
+        <div class="timeline-marker"></div>
+        <div class="timeline-content">
+          <h3>Q1 2025</h3>
+          <p>AI-powered insights launch</p>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-marker"></div>
+        <div class="timeline-content">
+          <h3>Q2 2025</h3>
+          <p>Mobile app release</p>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-marker"></div>
+        <div class="timeline-content">
+          <h3>Q3 2025</h3>
+          <p>Enterprise features</p>
+        </div>
+      </div>
+    </div>
+  </section>
+*/
+
+.reveal .slides section.slide-timeline .timeline-container {
+  display: flex !important;
+  flex-direction: row !important;
+  gap: var(--space-6);
+  position: relative;
+  padding: var(--space-12) 0;
+  flex: 1;
+  align-items: center !important;
+}
+
+.reveal .slides section.slide-timeline .timeline-container::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--color-border);
+  transform: translateY(-50%);
+}
+
+.reveal .slides section.slide-timeline .timeline-item {
+  flex: 1;
+  position: relative;
+  text-align: center;
+}
+
+.reveal .slides section.slide-timeline .timeline-marker {
+  width: 20px;
+  height: 20px;
+  background: var(--color-primary);
+  border-radius: var(--radius-full);
+  margin: 0 auto var(--space-4) auto;
+  position: relative;
+  z-index: 1;
+  border: 4px solid var(--color-bg-primary);
+  box-shadow: 0 0 0 2px var(--color-primary);
+}
+
+.reveal .slides section.slide-timeline h3 {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  margin-bottom: var(--space-2);
+}
+
+.reveal .slides section.slide-timeline .timeline-content p {
+  font-size: var(--font-size-base);
+  color: var(--color-text-secondary);
+}
+
+/* ==========================================================================
+   SLIDE TYPE: PROCESS
+   ========================================================================== */
+
+/*
+  Usage:
+  <section class="slide-process">
+    <h2>Our Methodology</h2>
+    <div class="process-container">
+      <div class="process-step">
+        <div class="process-number">1</div>
+        <h3>Discover</h3>
+        <p>Research and analysis</p>
+      </div>
+      <div class="process-step">
+        <div class="process-number">2</div>
+        <h3>Design</h3>
+        <p>Prototype solutions</p>
+      </div>
+      <div class="process-step">
+        <div class="process-number">3</div>
+        <h3>Develop</h3>
+        <p>Build and test</p>
+      </div>
+      <div class="process-step">
+        <div class="process-number">4</div>
+        <h3>Deploy</h3>
+        <p>Launch and iterate</p>
+      </div>
+    </div>
+  </section>
+*/
+
+.reveal .slides section.slide-process .process-container {
+  display: flex !important;
+  flex-direction: row !important;
+  gap: var(--space-6);
+  flex: 1;
+  align-items: flex-start !important;
+}
+
+.reveal .slides section.slide-process .process-step {
+  flex: 1;
+  text-align: center;
+  padding: var(--space-8);
+  background: var(--color-bg-secondary);
+  border-radius: var(--radius-xl);
+  position: relative;
+  transition: transform var(--transition-base);
+}
+
+.reveal .slides section.slide-process .process-step:hover {
+  transform: translateY(-4px);
+}
+
+.reveal .slides section.slide-process .process-number {
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+  color: var(--color-text-inverse);
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-black);
+  margin: 0 auto var(--space-6) auto;
+}
+
+.reveal .slides section.slide-process h3 {
+  font-size: var(--font-size-2xl);
+  margin-bottom: var(--space-4);
+}
+
+.reveal .slides section.slide-process p {
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-base);
+}
+
+/* ==========================================================================
+   SLIDE TYPE: TEAM
+   ========================================================================== */
+
+/*
+  Usage:
+  <section class="slide-team">
+    <h2>Leadership Team</h2>
+    <div class="team-container">
+      <div class="team-member">
+        <div class="avatar">
+          <img src="ceo.jpg" alt="John Smith">
+        </div>
+        <h3>John Smith</h3>
+        <p class="team-role">Chief Executive Officer</p>
+        <p class="team-bio">20+ years in tech leadership</p>
+      </div>
+      <!-- More team members -->
+    </div>
+  </section>
+*/
+
+.reveal .slides section.slide-team .team-container {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--space-8);
+  flex: 1;
+}
+
+.reveal .slides section.slide-team .team-member {
+  text-align: center;
+  padding: var(--space-6);
+  background: var(--color-bg-secondary);
+  border-radius: var(--radius-xl);
+  transition: transform var(--transition-base);
+}
+
+.reveal .slides section.slide-team .team-member:hover {
+  transform: translateY(-4px);
+}
+
+.reveal .slides section.slide-team h3 {
+  font-size: var(--font-size-xl);
+  margin: var(--space-4) 0 var(--space-2) 0;
+}
+
+.reveal .slides section.slide-team .team-role {
+  color: var(--color-primary);
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-base);
+  margin-bottom: var(--space-3);
+}
+
+.reveal .slides section.slide-team .team-bio {
+  color: var(--color-text-tertiary);
+  font-size: var(--font-size-sm);
+}
+
+/* ==========================================================================
+   SLIDE TYPE: PRICING
+   ========================================================================== */
+
+/*
+  Usage:
+  <section class="slide-pricing">
+    <h2>Simple, Transparent Pricing</h2>
+    <div class="pricing-container">
+      <div class="pricing-tier">
+        <h3>Starter</h3>
+        <div class="pricing-price">
+          <span class="price-amount">$29</span>
+          <span class="price-period">/month</span>
+        </div>
+        <ul class="pricing-features">
+          <li>Up to 10 users</li>
+          <li>5GB storage</li>
+          <li>Email support</li>
+        </ul>
+        <button class="button">Get Started</button>
+      </div>
+      <!-- More pricing tiers -->
+    </div>
+  </section>
+*/
+
+.reveal .slides section.slide-pricing .pricing-container {
+  display: flex !important;
+  flex-direction: row !important;
+  gap: var(--space-8);
+  flex: 1;
+  align-items: stretch !important;
+}
+
+.reveal .slides section.slide-pricing .pricing-tier {
+  flex: 1;
+  padding: var(--space-10);
+  background: var(--color-bg-secondary);
+  border-radius: var(--radius-xl);
+  border: 2px solid var(--color-border);
+  display: flex;
+  flex-direction: column;
+  transition: all var(--transition-base);
+}
+
+.reveal .slides section.slide-pricing .pricing-tier:hover {
+  transform: translateY(-8px);
+  border-color: var(--color-primary);
+  box-shadow: var(--shadow-2xl);
+}
+
+.reveal .slides section.slide-pricing .pricing-tier.featured {
+  border-color: var(--color-primary);
+  border-width: 3px;
+  position: relative;
+}
+
+.reveal .slides section.slide-pricing .pricing-tier.featured::before {
+  content: 'POPULAR';
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--color-primary);
+  color: var(--color-text-inverse);
+  padding: var(--space-2) var(--space-6);
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+}
+
+.reveal .slides section.slide-pricing h3 {
+  font-size: var(--font-size-2xl);
+  text-align: center;
+  margin-bottom: var(--space-6);
+}
+
+.reveal .slides section.slide-pricing .pricing-price {
+  text-align: center;
+  margin-bottom: var(--space-8);
+}
+
+.reveal .slides section.slide-pricing .price-amount {
+  font-size: var(--font-size-5xl);
+  font-weight: var(--font-weight-black);
+  color: var(--color-primary);
+}
+
+.reveal .slides section.slide-pricing .price-period {
+  font-size: var(--font-size-base);
+  color: var(--color-text-tertiary);
+}
+
+.reveal .slides section.slide-pricing .pricing-features {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 var(--space-8) 0;
+  flex: 1;
+}
+
+.reveal .slides section.slide-pricing .pricing-features li {
+  padding: var(--space-3) 0;
+  padding-left: var(--space-8);
+  position: relative;
+  color: var(--color-text-secondary);
+}
+
+.reveal .slides section.slide-pricing .pricing-features li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  color: var(--color-success);
+  font-weight: var(--font-weight-bold);
+}
+
+/* ==========================================================================
+   SLIDE TYPE: FEATURES
+   ========================================================================== */
+
+/*
+  Usage:
+  <section class="slide-features">
+    <h2>Platform Capabilities</h2>
+    <div class="features-grid">
+      <div class="feature-item">
+        <div class="icon-box">📊</div>
+        <h3>Analytics</h3>
+        <p>Real-time insights</p>
+      </div>
+      <!-- More features -->
+    </div>
+  </section>
+*/
+
+.reveal .slides section.slide-features .features-grid {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: var(--space-8);
+  flex: 1;
+}
+
+.reveal .slides section.slide-features .feature-item {
+  padding: var(--space-8);
+  background: var(--color-bg-secondary);
+  border-radius: var(--radius-xl);
+  text-align: center;
+  transition: transform var(--transition-base);
+}
+
+.reveal .slides section.slide-features .feature-item:hover {
+  transform: translateY(-4px);
+}
+
+.reveal .slides section.slide-features h3 {
+  font-size: var(--font-size-xl);
+  margin-bottom: var(--space-3);
+}
+
+.reveal .slides section.slide-features p {
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-base);
+}
+
+/* ==========================================================================
+   SLIDE TYPE: CTA (CALL TO ACTION)
+   ========================================================================== */
+
+/*
+  Usage:
+  <section class="slide-cta">
+    <div class="cta-content">
+      <h2>Ready to Transform Your Business?</h2>
+      <p>Join 10,000+ companies already using our platform</p>
+      <div class="cta-buttons">
+        <button class="button button-primary">Start Free Trial</button>
+        <button class="button button-secondary">Schedule Demo</button>
+      </div>
+    </div>
+  </section>
+*/
+
+.reveal .slides section.slide-cta {
+  justify-content: center !important;
+  align-items: center !important;
+  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+  position: relative;
+  overflow: hidden;
+}
+
+.reveal .slides section.slide-cta::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="2" fill="white" opacity="0.1"/></svg>');
+  opacity: 0.5;
+}
+
+.reveal .slides section.slide-cta .cta-content {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  max-width: 800px;
+  color: var(--color-text-inverse);
+}
+
+.reveal .slides section.slide-cta h2 {
+  font-size: var(--font-size-5xl);
+  font-weight: var(--font-weight-black);
+  color: var(--color-text-inverse);
+  margin-bottom: var(--space-6);
+}
+
+.reveal .slides section.slide-cta p {
+  font-size: var(--font-size-2xl);
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: var(--space-12);
+}
+
+.reveal .slides section.slide-cta .cta-buttons {
+  display: flex;
+  gap: var(--space-4);
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* ==========================================================================
+   SLIDE TYPE: AGENDA (NEW)
+   Section divider / Table of contents
+   ========================================================================== */
+
+/*
+  Usage:
+  <section class="slide-agenda">
+    <h2>Today's Agenda</h2>
+    <ol class="agenda-list">
+      <li class="active">
+        <span class="agenda-number">01</span>
+        <span class="agenda-title">Market Opportunity</span>
+      </li>
+      <li>
+        <span class="agenda-number">02</span>
+        <span class="agenda-title">Product Demo</span>
+      </li>
+      <li>
+        <span class="agenda-number">03</span>
+        <span class="agenda-title">Business Model</span>
+      </li>
+      <li>
+        <span class="agenda-number">04</span>
+        <span class="agenda-title">Next Steps</span>
+      </li>
+    </ol>
+  </section>
+*/
+
+.reveal .slides section.slide-agenda {
+  padding: var(--slide-padding-y) var(--slide-padding-x) !important;
+}
+
+.reveal .slides section.slide-agenda h2 {
+  font-size: var(--font-size-4xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-12);
+}
+
+.reveal .slides section.slide-agenda .agenda-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  max-width: 700px;
+}
+
+.reveal .slides section.slide-agenda .agenda-list li {
+  display: flex;
+  align-items: center;
+  gap: var(--space-6);
+  padding: var(--space-6);
+  background: var(--color-bg-secondary);
+  border-radius: var(--radius-lg);
+  border-left: 4px solid transparent;
+  transition: all var(--transition-base);
+  opacity: 0.6;
+}
+
+.reveal .slides section.slide-agenda .agenda-list li.active {
+  opacity: 1;
+  border-left-color: var(--color-primary);
+  background: var(--color-bg-tertiary);
+}
+
+.reveal .slides section.slide-agenda .agenda-list li.completed {
+  opacity: 0.4;
+}
+
+.reveal .slides section.slide-agenda .agenda-number {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-primary);
+  min-width: 50px;
+}
+
+.reveal .slides section.slide-agenda .agenda-title {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+}
+
+/* ==========================================================================
+   SLIDE TYPE: THANK YOU / CLOSING (NEW)
+   Final slide with contact info
+   ========================================================================== */
+
+/*
+  Usage:
+  <section class="slide-thank-you">
+    <div class="thank-you-content">
+      <h2>Thank You</h2>
+      <p class="tagline">Questions? Let's connect.</p>
+      <div class="contact-info">
+        <div class="contact-item">
+          <span class="contact-icon">✉</span>
+          <span>hello@company.com</span>
+        </div>
+        <div class="contact-item">
+          <span class="contact-icon">🌐</span>
+          <span>www.company.com</span>
+        </div>
+        <div class="contact-item">
+          <span class="contact-icon">📱</span>
+          <span>@company</span>
+        </div>
+      </div>
+    </div>
+  </section>
+*/
+
+.reveal .slides section.slide-thank-you {
+  justify-content: center !important;
+  align-items: center !important;
+  text-align: center;
+}
+
+.reveal .slides section.slide-thank-you .thank-you-content {
+  max-width: 700px;
+}
+
+.reveal .slides section.slide-thank-you h2 {
+  font-size: var(--font-size-6xl);
+  font-weight: var(--font-weight-black);
+  color: var(--color-primary);
+  margin-bottom: var(--space-4);
+  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.reveal .slides section.slide-thank-you .tagline {
+  font-size: var(--font-size-2xl);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-12);
+}
+
+.reveal .slides section.slide-thank-you .contact-info {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-8);
+  flex-wrap: wrap;
+}
+
+.reveal .slides section.slide-thank-you .contact-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-4) var(--space-6);
+  background: var(--color-bg-secondary);
+  border-radius: var(--radius-lg);
+  font-size: var(--font-size-lg);
+  color: var(--color-text-secondary);
+}
+
+.reveal .slides section.slide-thank-you .contact-icon {
+  font-size: var(--font-size-xl);
+}
+
+/* ==========================================================================
+   SLIDE TYPE: SOCIAL PROOF / LOGO CLOUD (NEW)
+   Client logos, partner logos, testimonial badges
+   ========================================================================== */
+
+/*
+  Usage:
+  <section class="slide-social-proof">
+    <h2>Trusted by Industry Leaders</h2>
+    <div class="logo-cloud">
+      <img src="logo1.svg" alt="Company 1">
+      <img src="logo2.svg" alt="Company 2">
+      <img src="logo3.svg" alt="Company 3">
+      <img src="logo4.svg" alt="Company 4">
+      <img src="logo5.svg" alt="Company 5">
+      <img src="logo6.svg" alt="Company 6">
+    </div>
+    <div class="proof-stats">
+      <div class="proof-stat">
+        <span class="stat-number">500+</span>
+        <span class="stat-label">Enterprise Clients</span>
+      </div>
+      <div class="proof-stat">
+        <span class="stat-number">98%</span>
+        <span class="stat-label">Customer Satisfaction</span>
+      </div>
+      <div class="proof-stat">
+        <span class="stat-number">$2B+</span>
+        <span class="stat-label">Revenue Enabled</span>
+      </div>
+    </div>
+  </section>
+*/
+
+.reveal .slides section.slide-social-proof {
+  padding: var(--slide-padding-y) var(--slide-padding-x) !important;
+  text-align: center;
+}
+
+.reveal .slides section.slide-social-proof h2 {
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-12);
+}
+
+.reveal .slides section.slide-social-proof .logo-cloud {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: var(--space-8);
+  align-items: center;
+  justify-items: center;
+  margin-bottom: var(--space-12);
+  padding: var(--space-8);
+}
+
+.reveal .slides section.slide-social-proof .logo-cloud img {
+  max-width: 120px;
+  max-height: 50px;
+  filter: grayscale(100%);
+  opacity: 0.6;
+  transition: all var(--transition-base);
+}
+
+.reveal .slides section.slide-social-proof .logo-cloud img:hover {
+  filter: grayscale(0%);
+  opacity: 1;
+}
+
+.reveal .slides section.slide-social-proof .proof-stats {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-12);
+  flex-wrap: wrap;
+}
+
+.reveal .slides section.slide-social-proof .proof-stat {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.reveal .slides section.slide-social-proof .stat-number {
+  font-size: var(--font-size-4xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-primary);
+}
+
+.reveal .slides section.slide-social-proof .stat-label {
+  font-size: var(--font-size-base);
+  color: var(--color-text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* ==========================================================================
+   SLIDE TYPE: CASE STUDY (NEW)
+   Customer success story
+   ========================================================================== */
+
+/*
+  Usage:
+  <section class="slide-case-study">
+    <div class="case-study-content">
+      <div class="case-study-header">
+        <img src="client-logo.svg" alt="Client Logo" class="client-logo">
+        <span class="case-study-label">Case Study</span>
+      </div>
+      <blockquote class="case-study-quote">
+        "Their platform reduced our processing time by 80% and saved us $2M annually."
+      </blockquote>
+      <div class="case-study-author">
+        <img src="avatar.jpg" alt="John Smith" class="author-avatar">
+        <div class="author-info">
+          <span class="author-name">John Smith</span>
+          <span class="author-title">CTO, Acme Corp</span>
+        </div>
+      </div>
+      <div class="case-study-results">
+        <div class="result">
+          <span class="result-number">80%</span>
+          <span class="result-label">Time Saved</span>
+        </div>
+        <div class="result">
+          <span class="result-number">$2M</span>
+          <span class="result-label">Annual Savings</span>
+        </div>
+        <div class="result">
+          <span class="result-number">3 mo</span>
+          <span class="result-label">Payback Period</span>
+        </div>
+      </div>
+    </div>
+  </section>
+*/
+
+.reveal .slides section.slide-case-study {
+  padding: var(--slide-padding-y) var(--slide-padding-x) !important;
+}
+
+.reveal .slides section.slide-case-study .case-study-content {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.reveal .slides section.slide-case-study .case-study-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  margin-bottom: var(--space-8);
+}
+
+.reveal .slides section.slide-case-study .client-logo {
+  max-height: 40px;
+  filter: brightness(0) invert(1);
+  opacity: 0.8;
+}
+
+.reveal .slides section.slide-case-study .case-study-label {
+  font-size: var(--font-size-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--color-primary);
+  padding: var(--space-1) var(--space-3);
+  background: rgba(59, 130, 246, 0.1);
+  border-radius: var(--radius-full);
+}
+
+.reveal .slides section.slide-case-study .case-study-quote {
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+  font-style: italic;
+  line-height: var(--line-height-relaxed);
+  margin: 0 0 var(--space-8) 0;
+  padding-left: var(--space-6);
+  border-left: 4px solid var(--color-primary);
+}
+
+.reveal .slides section.slide-case-study .case-study-author {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  margin-bottom: var(--space-10);
+}
+
+.reveal .slides section.slide-case-study .author-avatar {
+  width: 60px;
+  height: 60px;
+  border-radius: var(--radius-full);
+  object-fit: cover;
+}
+
+.reveal .slides section.slide-case-study .author-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.reveal .slides section.slide-case-study .author-name {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+}
+
+.reveal .slides section.slide-case-study .author-title {
+  font-size: var(--font-size-base);
+  color: var(--color-text-tertiary);
+}
+
+.reveal .slides section.slide-case-study .case-study-results {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-6);
+  padding: var(--space-8);
+  background: var(--color-bg-secondary);
+  border-radius: var(--radius-xl);
+}
+
+.reveal .slides section.slide-case-study .result {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.reveal .slides section.slide-case-study .result-number {
+  font-size: var(--font-size-4xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-success);
+}
+
+.reveal .slides section.slide-case-study .result-label {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* ==========================================================================
+   SLIDE TYPE: SECTION DIVIDER (NEW)
+   Bold section break
+   ========================================================================== */
+
+/*
+  Usage:
+  <section class="slide-section-divider">
+    <span class="section-number">02</span>
+    <h2>Product Demo</h2>
+    <p class="section-subtitle">See it in action</p>
+  </section>
+*/
+
+.reveal .slides section.slide-section-divider {
+  justify-content: center !important;
+  align-items: center !important;
+  text-align: center;
+  background: linear-gradient(135deg, var(--color-bg-primary), var(--color-bg-secondary));
+}
+
+.reveal .slides section.slide-section-divider .section-number {
+  display: block;
+  font-size: var(--font-size-7xl);
+  font-weight: var(--font-weight-black);
+  color: var(--color-primary);
+  opacity: 0.3;
+  line-height: 1;
+  margin-bottom: var(--space-4);
+}
+
+.reveal .slides section.slide-section-divider h2 {
+  font-size: var(--font-size-5xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-4);
+}
+
+.reveal .slides section.slide-section-divider .section-subtitle {
+  font-size: var(--font-size-xl);
+  color: var(--color-text-tertiary);
+}
+
+/* ==========================================================================
+   COMPONENT: SOURCE/CITATION (NEW)
+   Properly styled source citations
+   ========================================================================== */
+
+.source,
+.citation {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-tertiary);
+  position: absolute;
+  bottom: var(--space-4);
+  left: var(--slide-padding-x);
+  right: var(--slide-padding-x);
+}
+
+.source::before {
+  content: 'Source: ';
+  font-weight: var(--font-weight-medium);
+}
+
+/* ==========================================================================
+   COMPONENT: CAPTION (NEW)
+   Image/chart captions
+   ========================================================================== */
+
+.caption {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-tertiary);
+  text-align: center;
+  margin-top: var(--space-4);
+  font-style: italic;
+}
+
+.caption-left {
+  text-align: left;
+}
+
+/* ==========================================================================
+   SLIDE TYPE: CHART
+   ========================================================================== */
+
+/*
+  Usage:
+  <section class="slide-chart">
+    <h2>Revenue Growth Trajectory</h2>
+    <div class="chart-container">
+      <div class="chart-visual">
+        <canvas id="myChart"></canvas>
+      </div>
+      <div class="callout">
+        <h3>Key Insight</h3>
+        <p>Q4 shows 200% YoY growth driven by enterprise expansion</p>
+      </div>
+    </div>
+  </section>
+*/
+
+.reveal .slides section.slide-chart .chart-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+  flex: 1;
+}
+
+.reveal .slides section.slide-chart .chart-visual {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-bg-secondary);
+  border-radius: var(--radius-xl);
+  padding: var(--space-8);
+}
+
+.reveal .slides section.slide-chart canvas {
+  max-height: 400px;
+}
+
+/* ==========================================================================
+   SLIDE TYPE: TABLE
+   ========================================================================== */
+
+/*
+  Usage:
+  <section class="slide-table">
+    <h2>Q4 Performance Summary</h2>
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Metric</th>
+            <th>Q3</th>
+            <th>Q4</th>
+            <th>Change</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Revenue</td>
+            <td>$2.5M</td>
+            <td>$3.8M</td>
+            <td class="positive">+52%</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+*/
+
+.reveal .slides section.slide-table .table-container {
+  flex: 1;
+  overflow-x: auto;
+  overflow-y: auto;
+  background: var(--color-bg-secondary);
+  border-radius: var(--radius-xl);
+  padding: var(--space-6);
+}
+
+.reveal .slides section.slide-table table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: var(--font-size-base);
+}
+
+.reveal .slides section.slide-table th {
+  background: var(--color-bg-tertiary);
+  color: var(--color-text-primary);
+  font-weight: var(--font-weight-bold);
+  padding: var(--space-4);
+  text-align: left;
+  border-bottom: 2px solid var(--color-border);
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.reveal .slides section.slide-table td {
+  padding: var(--space-4);
+  border-bottom: 1px solid var(--color-border);
+  color: var(--color-text-secondary);
+}
+
+.reveal .slides section.slide-table tr:hover {
+  background: var(--color-bg-tertiary);
+}
+
+.reveal .slides section.slide-table .positive {
+  color: var(--color-success);
+  font-weight: var(--font-weight-bold);
+}
+
+.reveal .slides section.slide-table .negative {
+  color: var(--color-error);
+  font-weight: var(--font-weight-bold);
+}
+
+/* ==========================================================================
+   SLIDE TYPE: VIDEO
+   ========================================================================== */
+
+/*
+  Usage:
+  <section class="slide-video">
+    <h2>Product Demo</h2>
+    <div class="video-container">
+      <iframe src="https://www.youtube.com/embed/..." frameborder="0" allowfullscreen></iframe>
+    </div>
+  </section>
+*/
+
+.reveal .slides section.slide-video .video-container {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-bg-secondary);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  position: relative;
+}
+
+.reveal .slides section.slide-video .video-container iframe,
+.reveal .slides section.slide-video .video-container video {
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 16 / 9;
+}
+
+/* ==========================================================================
+   SLIDE TYPE: IMAGE FULL
+   ========================================================================== */
+
+/*
+  Usage:
+  <section class="slide-image-full" data-background-image="hero.jpg">
+    <div class="image-overlay">
+      <h2>Transforming Industries</h2>
+      <p>One innovation at a time</p>
+    </div>
+  </section>
+*/
+
+.reveal .slides section.slide-image-full {
+  background-size: cover !important;
+  background-position: center !important;
+  justify-content: center !important;
+  align-items: center !important;
+  position: relative;
+}
+
+.reveal .slides section.slide-image-full::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.reveal .slides section.slide-image-full .image-overlay {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  color: var(--color-text-inverse);
+  max-width: 800px;
+}
+
+.reveal .slides section.slide-image-full h2 {
+  font-size: var(--font-size-6xl);
+  color: var(--color-text-inverse);
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+.reveal .slides section.slide-image-full p {
+  font-size: var(--font-size-2xl);
+  color: rgba(255, 255, 255, 0.9);
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+/* ==========================================================================
+   UI COMPONENTS
+   ========================================================================== */
+
+/* Badge Component */
+.badge {
+  display: inline-block;
+  padding: var(--space-2) var(--space-4);
+  background: var(--color-primary);
+  color: var(--color-text-inverse);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  border-radius: var(--radius-full);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: var(--space-4);
+}
+
+.badge.badge-secondary {
+  background: var(--color-secondary);
+}
+
+.badge.badge-success {
+  background: var(--color-success);
+}
+
+.badge.badge-warning {
+  background: var(--color-warning);
+}
+
+.badge.badge-error {
+  background: var(--color-error);
+}
+
+/* Card Component */
+.card {
+  background: var(--color-bg-secondary);
+  border-radius: var(--radius-xl);
+  padding: var(--space-8);
+  border: 1px solid var(--color-border);
+  transition: all var(--transition-base);
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-xl);
+  border-color: var(--color-primary);
+}
+
+.card h3 {
+  font-size: var(--font-size-2xl);
+  margin-bottom: var(--space-4);
+}
+
+.card p {
+  color: var(--color-text-secondary);
+}
+
+/* Metric Component */
+.metric {
+  text-align: center;
+  padding: var(--space-6);
+  background: var(--color-bg-secondary);
+  border-radius: var(--radius-xl);
+}
+
+.metric-value {
+  font-size: var(--font-size-5xl);
+  font-weight: var(--font-weight-black);
+  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1;
+  margin-bottom: var(--space-3);
+}
+
+.metric-label {
+  font-size: var(--font-size-base);
+  color: var(--color-text-secondary);
+  font-weight: var(--font-weight-medium);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Callout Component */
+.callout {
+  background: var(--color-bg-secondary);
+  border-left: 4px solid var(--color-primary);
+  padding: var(--space-6);
+  border-radius: var(--radius-lg);
+  margin: var(--space-6) 0;
+}
+
+.callout h3 {
+  font-size: var(--font-size-xl);
+  margin-bottom: var(--space-3);
+  color: var(--color-primary);
+}
+
+.callout p {
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+
+.callout.callout-info {
+  border-left-color: var(--color-primary);
+}
+
+.callout.callout-success {
+  border-left-color: var(--color-success);
+}
+
+.callout.callout-warning {
+  border-left-color: var(--color-warning);
+}
+
+.callout.callout-error {
+  border-left-color: var(--color-error);
+}
+
+/* Icon Box Component */
+.icon-box {
+  width: 80px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+  border-radius: var(--radius-xl);
+  font-size: var(--font-size-4xl);
+  margin: 0 auto var(--space-6) auto;
+  box-shadow: var(--shadow-lg);
+}
+
+/* Progress Bar Component */
+.progress-bar {
+  width: 100%;
+  height: 12px;
+  background: var(--color-bg-tertiary);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  margin: var(--space-4) 0;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
+  border-radius: var(--radius-full);
+  transition: width var(--transition-slow);
+}
+
+/* Avatar Component */
+.avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  border: 3px solid var(--color-border);
+  box-shadow: var(--shadow-md);
+}
+
+.avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.avatar.avatar-sm {
+  width: 40px;
+  height: 40px;
+}
+
+.avatar.avatar-lg {
+  width: 120px;
+  height: 120px;
+}
+
+/* Tag Component */
+.tag {
+  display: inline-block;
+  padding: var(--space-1) var(--space-3);
+  background: var(--color-bg-tertiary);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+  border-radius: var(--radius-md);
+  margin-right: var(--space-2);
+  margin-bottom: var(--space-2);
+}
+
+/* Button Component */
+.button {
+  display: inline-block;
+  padding: var(--space-4) var(--space-8);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+  text-align: center;
+  text-decoration: none;
+  border: none;
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  transition: all var(--transition-base);
+  font-family: var(--font-body);
+  min-height: 44px; /* Accessibility: minimum touch target */
+  min-width: 44px;
+}
+
+.button-primary {
+  background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
+  color: var(--color-text-inverse);
+  box-shadow: var(--shadow-md);
+}
+
+.button-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-xl);
+}
+
+.button-secondary {
+  background: transparent;
+  color: var(--color-text-inverse);
+  border: 2px solid var(--color-text-inverse);
+}
+
+.button-secondary:hover {
+  background: var(--color-text-inverse);
+  color: var(--color-primary);
+}
+
+.button-outline {
+  background: transparent;
+  color: var(--color-primary);
+  border: 2px solid var(--color-primary);
+}
+
+.button-outline:hover {
+  background: var(--color-primary);
+  color: var(--color-text-inverse);
+}
+
+.button-large {
+  padding: var(--space-6) var(--space-12);
+  font-size: var(--font-size-lg);
+}
+
+.button-small {
+  padding: var(--space-2) var(--space-4);
+  font-size: var(--font-size-sm);
+}
+
+/* Divider Component */
+.divider {
+  height: 2px;
+  background: var(--color-border);
+  margin: var(--space-8) 0;
+  border: none;
+}
+
+.divider-gradient {
+  background: linear-gradient(90deg, transparent, var(--color-primary), transparent);
+}
+
+.divider-vertical {
+  width: 2px;
+  height: 100%;
+  margin: 0 var(--space-8);
+}
+
+/* Browser Frame Component */
+.browser-frame {
+  background: var(--color-bg-secondary);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-2xl);
+  border: 1px solid var(--color-border);
+}
+
+.browser-frame::before {
+  content: '';
+  display: block;
+  height: 40px;
+  background: var(--color-bg-tertiary);
+  border-bottom: 1px solid var(--color-border);
+  position: relative;
+}
+
+.browser-frame img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* Phone Frame Component */
+.phone-frame {
+  max-width: 300px;
+  margin: 0 auto;
+  background: var(--color-bg-primary);
+  border-radius: 30px;
+  padding: 15px;
+  box-shadow: var(--shadow-2xl);
+  border: 8px solid var(--color-bg-tertiary);
+  position: relative;
+}
+
+.phone-frame::before {
+  content: '';
+  position: absolute;
+  top: 5px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 6px;
+  background: var(--color-bg-tertiary);
+  border-radius: var(--radius-full);
+}
+
+.phone-frame img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 20px;
+}
+
+/* Laptop Frame Component */
+.laptop-frame {
+  background: var(--color-bg-tertiary);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  overflow: hidden;
+  box-shadow: var(--shadow-2xl);
+  padding: 20px 20px 0 20px;
+  position: relative;
+}
+
+.laptop-frame::after {
+  content: '';
+  display: block;
+  height: 20px;
+  background: var(--color-bg-tertiary);
+  border-radius: 0 0 var(--radius-2xl) var(--radius-2xl);
+  margin: 0 -100px;
+}
+
+.laptop-frame img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
+}
+
+/* ==========================================================================
+   ANIMATION LIBRARY
+   ========================================================================== */
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes blurIn {
+  from {
+    opacity: 0;
+    filter: blur(10px);
+  }
+  to {
+    opacity: 1;
+    filter: blur(0);
+  }
+}
+
+/* NEW: Slide from Left */
+@keyframes slideLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* NEW: Slide from Right */
+@keyframes slideRight {
+  from {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* NEW: Slide Down */
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* NEW: Bounce In */
+@keyframes bounceIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+  70% {
+    transform: scale(0.95);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* NEW: Flip In X */
+@keyframes flipInX {
+  from {
+    opacity: 0;
+    transform: perspective(400px) rotateX(90deg);
+  }
+  to {
+    opacity: 1;
+    transform: perspective(400px) rotateX(0);
+  }
+}
+
+/* NEW: Flip In Y */
+@keyframes flipInY {
+  from {
+    opacity: 0;
+    transform: perspective(400px) rotateY(90deg);
+  }
+  to {
+    opacity: 1;
+    transform: perspective(400px) rotateY(0);
+  }
+}
+
+/* NEW: Zoom In */
+@keyframes zoomIn {
+  from {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* NEW: Zoom Out (from large) */
+@keyframes zoomOut {
+  from {
+    opacity: 0;
+    transform: scale(1.5);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* NEW: Rotate In */
+@keyframes rotateIn {
+  from {
+    opacity: 0;
+    transform: rotate(-180deg) scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: rotate(0) scale(1);
+  }
+}
+
+/* NEW: Swing In */
+@keyframes swingIn {
+  0% {
+    opacity: 0;
+    transform: rotateX(-30deg);
+    transform-origin: top center;
+  }
+  100% {
+    opacity: 1;
+    transform: rotateX(0);
+    transform-origin: top center;
+  }
+}
+
+/* NEW: Drop In */
+@keyframes dropIn {
+  0% {
+    opacity: 0;
+    transform: translateY(-100px) rotate(-10deg);
+  }
+  50% {
+    transform: translateY(10px) rotate(3deg);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) rotate(0);
+  }
+}
+
+/* NEW: Pulse Attention Animation */
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 0.9;
+  }
+}
+
+/* NEW: Shake Attention Animation */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+  20%, 40%, 60%, 80% { transform: translateX(5px); }
+}
+
+/* NEW: Glow Attention Animation */
+@keyframes glow {
+  0%, 100% {
+    box-shadow: 0 0 5px var(--color-primary);
+  }
+  50% {
+    box-shadow: 0 0 20px var(--color-primary), 0 0 30px var(--color-primary-light);
+  }
+}
+
+/* Animation Classes */
+.animate-fade-in {
+  animation: fadeIn 0.8s ease-out;
+}
+
+.animate-slide-up {
+  animation: slideUp 0.8s ease-out;
+}
+
+.animate-scale-in {
+  animation: scaleIn 0.8s ease-out;
+}
+
+.animate-blur-in {
+  animation: blurIn 0.8s ease-out;
+}
+
+.animate-slide-left {
+  animation: slideLeft 0.8s ease-out;
+}
+
+.animate-slide-right {
+  animation: slideRight 0.8s ease-out;
+}
+
+.animate-slide-down {
+  animation: slideDown 0.8s ease-out;
+}
+
+.animate-bounce-in {
+  animation: bounceIn 0.8s ease-out;
+}
+
+.animate-flip-x {
+  animation: flipInX 0.8s ease-out;
+}
+
+.animate-flip-y {
+  animation: flipInY 0.8s ease-out;
+}
+
+.animate-zoom-in {
+  animation: zoomIn 0.6s ease-out;
+}
+
+.animate-zoom-out {
+  animation: zoomOut 0.6s ease-out;
+}
+
+.animate-rotate-in {
+  animation: rotateIn 0.8s ease-out;
+}
+
+.animate-swing-in {
+  animation: swingIn 0.8s ease-out;
+}
+
+.animate-drop-in {
+  animation: dropIn 0.8s ease-out;
+}
+
+/* Attention Animations (loop) */
+.animate-pulse {
+  animation: pulse 2s infinite;
+}
+
+.animate-shake {
+  animation: shake 0.5s ease-in-out;
+}
+
+.animate-glow {
+  animation: glow 2s infinite;
+}
+
+/* Animation Delay Utilities */
+.delay-100 { animation-delay: 100ms; }
+.delay-200 { animation-delay: 200ms; }
+.delay-300 { animation-delay: 300ms; }
+.delay-400 { animation-delay: 400ms; }
+.delay-500 { animation-delay: 500ms; }
+.delay-700 { animation-delay: 700ms; }
+.delay-1000 { animation-delay: 1000ms; }
+
+/* Stagger Children Animation */
+.stagger-children > *:nth-child(1) { animation-delay: 0ms; }
+.stagger-children > *:nth-child(2) { animation-delay: 100ms; }
+.stagger-children > *:nth-child(3) { animation-delay: 200ms; }
+.stagger-children > *:nth-child(4) { animation-delay: 300ms; }
+.stagger-children > *:nth-child(5) { animation-delay: 400ms; }
+.stagger-children > *:nth-child(6) { animation-delay: 500ms; }
+.stagger-children > *:nth-child(7) { animation-delay: 600ms; }
+.stagger-children > *:nth-child(8) { animation-delay: 700ms; }
+
+/* Reveal.js fragment animations */
+.reveal .slides section .fragment.animate-fade-in {
+  opacity: 0;
+}
+
+.reveal .slides section .fragment.animate-fade-in.visible {
+  opacity: 1;
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ==========================================================================
+   UTILITY CLASSES
+   ========================================================================== */
+
+/* Spacing Utilities */
+.m-0 { margin: 0 !important; }
+.m-1 { margin: var(--space-1) !important; }
+.m-2 { margin: var(--space-2) !important; }
+.m-3 { margin: var(--space-3) !important; }
+.m-4 { margin: var(--space-4) !important; }
+.m-6 { margin: var(--space-6) !important; }
+.m-8 { margin: var(--space-8) !important; }
+.m-12 { margin: var(--space-12) !important; }
+
+.mt-0 { margin-top: 0 !important; }
+.mt-1 { margin-top: var(--space-1) !important; }
+.mt-2 { margin-top: var(--space-2) !important; }
+.mt-3 { margin-top: var(--space-3) !important; }
+.mt-4 { margin-top: var(--space-4) !important; }
+.mt-6 { margin-top: var(--space-6) !important; }
+.mt-8 { margin-top: var(--space-8) !important; }
+.mt-12 { margin-top: var(--space-12) !important; }
+
+.mb-0 { margin-bottom: 0 !important; }
+.mb-1 { margin-bottom: var(--space-1) !important; }
+.mb-2 { margin-bottom: var(--space-2) !important; }
+.mb-3 { margin-bottom: var(--space-3) !important; }
+.mb-4 { margin-bottom: var(--space-4) !important; }
+.mb-6 { margin-bottom: var(--space-6) !important; }
+.mb-8 { margin-bottom: var(--space-8) !important; }
+.mb-12 { margin-bottom: var(--space-12) !important; }
+
+.p-0 { padding: 0 !important; }
+.p-1 { padding: var(--space-1) !important; }
+.p-2 { padding: var(--space-2) !important; }
+.p-3 { padding: var(--space-3) !important; }
+.p-4 { padding: var(--space-4) !important; }
+.p-6 { padding: var(--space-6) !important; }
+.p-8 { padding: var(--space-8) !important; }
+.p-12 { padding: var(--space-12) !important; }
+
+/* Text Alignment */
+.text-left { text-align: left !important; }
+.text-center { text-align: center !important; }
+.text-right { text-align: right !important; }
+
+/* Flexbox Helpers */
+.flex { display: flex !important; }
+.flex-row { flex-direction: row !important; }
+.flex-column { flex-direction: column !important; }
+.flex-wrap { flex-wrap: wrap !important; }
+.flex-nowrap { flex-wrap: nowrap !important; }
+
+.justify-start { justify-content: flex-start !important; }
+.justify-center { justify-content: center !important; }
+.justify-end { justify-content: flex-end !important; }
+.justify-between { justify-content: space-between !important; }
+.justify-around { justify-content: space-around !important; }
+
+.items-start { align-items: flex-start !important; }
+.items-center { align-items: center !important; }
+.items-end { align-items: flex-end !important; }
+.items-stretch { align-items: stretch !important; }
+
+.flex-1 { flex: 1 1 0% !important; }
+.flex-auto { flex: 1 1 auto !important; }
+.flex-none { flex: none !important; }
+
+.gap-2 { gap: var(--space-2) !important; }
+.gap-4 { gap: var(--space-4) !important; }
+.gap-6 { gap: var(--space-6) !important; }
+.gap-8 { gap: var(--space-8) !important; }
+.gap-12 { gap: var(--space-12) !important; }
+
+/* Grid Helpers */
+.grid { display: grid !important; }
+.grid-cols-2 { grid-template-columns: repeat(2, 1fr) !important; }
+.grid-cols-3 { grid-template-columns: repeat(3, 1fr) !important; }
+.grid-cols-4 { grid-template-columns: repeat(4, 1fr) !important; }
+
+/* Color Utilities */
+.text-primary { color: var(--color-primary) !important; }
+.text-secondary { color: var(--color-text-secondary) !important; }
+.text-tertiary { color: var(--color-text-tertiary) !important; }
+.text-success { color: var(--color-success) !important; }
+.text-warning { color: var(--color-warning) !important; }
+.text-error { color: var(--color-error) !important; }
+
+.bg-primary { background: var(--color-bg-primary) !important; }
+.bg-secondary { background: var(--color-bg-secondary) !important; }
+.bg-tertiary { background: var(--color-bg-tertiary) !important; }
+
+/* Font Weight */
+.font-normal { font-weight: var(--font-weight-normal) !important; }
+.font-medium { font-weight: var(--font-weight-medium) !important; }
+.font-semibold { font-weight: var(--font-weight-semibold) !important; }
+.font-bold { font-weight: var(--font-weight-bold) !important; }
+.font-black { font-weight: var(--font-weight-black) !important; }
+
+/* Font Size */
+.text-xs { font-size: var(--font-size-xs) !important; }
+.text-sm { font-size: var(--font-size-sm) !important; }
+.text-base { font-size: var(--font-size-base) !important; }
+.text-lg { font-size: var(--font-size-lg) !important; }
+.text-xl { font-size: var(--font-size-xl) !important; }
+.text-2xl { font-size: var(--font-size-2xl) !important; }
+.text-3xl { font-size: var(--font-size-3xl) !important; }
+.text-4xl { font-size: var(--font-size-4xl) !important; }
+
+/* Display */
+.block { display: block !important; }
+.inline-block { display: inline-block !important; }
+.inline { display: inline !important; }
+.hidden { display: none !important; }
+
+/* Width */
+.w-full { width: 100% !important; }
+.w-auto { width: auto !important; }
+
+/* Height */
+.h-full { height: 100% !important; }
+.h-auto { height: auto !important; }
+
+/* ==========================================================================
+   ACCESSIBILITY
+   ========================================================================== */
+
+/* Focus Visible States */
+*:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* High Contrast Mode Support */
+@media (prefers-contrast: high) {
+  :root {
+    --color-border: currentColor;
+  }
+
+  .reveal .slides section {
+    border: 2px solid currentColor;
+  }
+
+  .button {
+    border: 2px solid currentColor;
+  }
+}
+
+/* Screen Reader Only */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* Skip to Content Link */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: var(--color-primary);
+  color: var(--color-text-inverse);
+  padding: var(--space-2) var(--space-4);
+  text-decoration: none;
+  z-index: 100;
+}
+
+.skip-link:focus {
+  top: 0;
+}
+
+/* ==========================================================================
+   RESPONSIVE BREAKPOINTS
+   ========================================================================== */
+
+/* Tablet (Portrait) */
+@media (max-width: 768px) {
+  :root {
+    --slide-padding-x: clamp(1.5rem, 4vw, 2.5rem);
+    --slide-padding-y: clamp(1.5rem, 4vh, 2rem);
+  }
+
+  .reveal .slides section.slide-screenshot .screenshot-container,
+  .reveal .slides section.slide-screenshot-left .screenshot-container,
+  .reveal .slides section.slide-screenshot-right .screenshot-container {
+    flex-direction: column !important;
+  }
+
+  .reveal .slides section.slide-two-column .two-column-container {
+    flex-direction: column !important;
+  }
+
+  .reveal .slides section.slide-three-column .three-column-container {
+    grid-template-columns: 1fr !important;
+  }
+
+  .reveal .slides section.slide-four-column .four-column-container {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  .reveal .slides section.slide-comparison .comparison-container {
+    flex-direction: column !important;
+  }
+
+  .reveal .slides section.slide-pricing .pricing-container {
+    flex-direction: column !important;
+  }
+
+  .reveal .slides section.slide-process .process-container {
+    flex-direction: column !important;
+  }
+
+  .reveal .slides section.slide-timeline .timeline-container {
+    flex-direction: column !important;
+  }
+
+  .reveal .slides section.slide-timeline .timeline-container::before {
+    left: 20px;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    height: auto;
+  }
+
+  .reveal .slides section.slide-timeline .timeline-marker {
+    position: absolute;
+    left: 11px;
+  }
+
+  .reveal .slides section.slide-timeline .timeline-content {
+    padding-left: var(--space-12);
+  }
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+  :root {
+    --slide-padding-x: 1.5rem;
+    --slide-padding-y: 1.5rem;
+  }
+
+  .reveal h1 { font-size: var(--font-size-4xl); }
+  .reveal h2 { font-size: var(--font-size-3xl); }
+
+  .reveal .slides section.slide-four-column .four-column-container {
+    grid-template-columns: 1fr !important;
+  }
+
+  .reveal .slides section.slide-features .features-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .reveal .slides section.slide-cta .cta-buttons {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .reveal .slides section.slide-cta .button {
+    width: 100%;
+  }
+}
+
+/* ==========================================================================
+   PRINT STYLES
+   ========================================================================== */
+
+@media print {
+  :root {
+    --color-bg-primary: #ffffff;
+    --color-bg-secondary: #f5f5f5;
+    --color-bg-tertiary: #e5e5e5;
+    --color-text-primary: #000000;
+    --color-text-secondary: #333333;
+    --color-text-tertiary: #666666;
+  }
+
+  .reveal .slides section {
+    page-break-after: always;
+    page-break-inside: avoid;
+  }
+
+  .reveal .slides section,
+  .reveal .slides section * {
+    color: #000000 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+
+  .reveal a,
+  .reveal a:visited {
+    text-decoration: underline;
+    color: #0066cc !important;
+  }
+
+  .reveal a[href]::after {
+    content: " (" attr(href) ")";
+    font-size: 0.8em;
+  }
+
+  .browser-frame::before,
+  .phone-frame::before,
+  .laptop-frame::after {
+    display: none;
+  }
+
+  .button,
+  .badge {
+    border: 1px solid #000000 !important;
+  }
+}
+
+/* ==========================================================================
+   DARK MODE OVERRIDE (for systems with dark mode preference)
+   ========================================================================== */
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    --color-bg-primary: #0f172a;
+    --color-bg-secondary: #1e293b;
+    --color-bg-tertiary: #334155;
+    --color-text-primary: #f8fafc;
+    --color-text-secondary: #cbd5e1;
+    --color-text-tertiary: #94a3b8;
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme]) {
+    --color-bg-primary: #ffffff;
+    --color-bg-secondary: #f8fafc;
+    --color-bg-tertiary: #e2e8f0;
+    --color-text-primary: #0f172a;
+    --color-text-secondary: #475569;
+    --color-text-tertiary: #64748b;
+  }
+}
