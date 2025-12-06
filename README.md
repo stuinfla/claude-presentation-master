@@ -3,256 +3,132 @@
 <div align="center">
 
 ![NPM Version](https://img.shields.io/npm/v/claude-presentation-master)
-![Node](https://img.shields.io/badge/node-%3E%3D18.0.0-green.svg)
+![Downloads](https://img.shields.io/npm/dm/claude-presentation-master)
 ![License](https://img.shields.io/badge/license-MIT-brightgreen.svg)
-![TypeScript](https://img.shields.io/badge/TypeScript-5.3-blue.svg)
 
-### The presentation engine that makes Claude actually good at slides.
+### Turn your Claude projects into polished presentations — instantly.
 
-**Give Claude your project. Get back McKinsey-quality presentations.**
+You've been working in Claude on a business project. Strategy docs, research, analysis, plans.
+Now someone asks for a presentation. **This is usually where things get painful.**
 
-[Installation](#installation) •
-[Quick Start](#quick-start) •
-[Why This Exists](#why-this-exists) •
-[The Knowledge Base](#the-knowledge-base) •
-[Output Formats](#output-formats)
+Not anymore.
+
+[Install Now](#installation) •
+[See It Work](#quick-start) •
+[What's Inside](#the-knowledge-base)
 
 </div>
 
 ---
 
-## The Problem
+## The Scenario
 
-You ask Claude to make a presentation. You get:
-- Generic bullet points
-- Walls of text
-- No visual structure
-- Amateur layouts
-- Zero understanding of what makes slides actually work
+You're deep in a Claude Code session. You've built something real:
+- A product strategy
+- A quarterly business review
+- An investor pitch
+- A project plan
+- A competitive analysis
 
-**Claude is brilliant at many things. Presentations isn't one of them.**
+Now you need slides.
 
-That's not Claude's fault. It wasn't trained on McKinsey decks. It never studied Nancy Duarte's frameworks. It doesn't know that Steve Jobs averaged 10 words per slide, or that TED talks follow a specific narrative arc, or that consulting firms use action titles instead of topic labels.
+**What usually happens:**
 
----
+You ask Claude to make a presentation. You get walls of text, generic bullet points, and amateur formatting. You spend the next two hours manually fixing everything in PowerPoint. Or you give up and just build it from scratch.
 
-## The Solution
-
-We spent months scouring the internet for everything ever written about making great presentations:
-
-- **600+ real consulting presentations** from McKinsey, BCG, and Bain
-- **Bestselling books** from Nancy Duarte, Garr Reynolds, Carmine Gallo, Chris Anderson
-- **YouTube channels** with millions of views on presentation design
-- **Academic research** on cognitive load, visual perception, and persuasion
-- **Corporate style guides** from the world's top firms
-
-Then we encoded all of it — **6,300+ lines of expert knowledge** — into an agentic vector database that Claude can use.
-
-**Now Claude doesn't have to be smart about presentations. The knowledge base is smart for it.**
-
-When you use this library, Claude hands off the hard part. Instead of guessing how to structure slides, it follows:
-- McKinsey's Pyramid Principle
-- Duarte's Sparkline narrative arc
-- Tufte's data-ink ratio
-- Minto's SCQA framework
-- Gallo's Rule of Three
-
-The result? **Clean, professional presentations** that look like they came from a $500/hour consultant — generated in seconds from your project notes, strategy docs, or rough ideas.
-
----
-
-## What You Get
+**What happens with this library:**
 
 ```
-Your project notes/docs/ideas
+Your Claude project context
          ↓
-   Claude Presentation Master
+   One command
          ↓
-Production-ready presentations (HTML or PowerPoint)
+Professional presentation (HTML or PowerPoint)
+Ready to present. Ready to send to clients.
 ```
 
-**HTML Output:** Modern web presentations using Reveal.js. Share via URL, works in any browser, looks like a polished online version of PowerPoint with animations, speaker notes, and keyboard navigation.
+---
 
-**PowerPoint Output:** Traditional PPTX files. Open in PowerPoint, edit further, send to clients. The format everyone expects.
+## Why This Works
 
-Both outputs follow the same expert principles. Both pass a 95/100 quality bar. Both look like they took hours to make.
+Claude is brilliant at research, analysis, and strategy. But presentations? Not so much.
+
+That's because Claude wasn't trained on what actually makes presentations work:
+- McKinsey consultants don't use bullet points — they use action titles
+- TED speakers don't dump information — they follow the Sparkline narrative arc
+- Steve Jobs averaged 10 words per slide — not 100
+- Investment bankers structure decks with the Pyramid Principle — answer first, support second
+
+**We spent months building a knowledge base that knows all of this.**
+
+We scoured the internet for everything ever written about making great presentations:
+
+| Source | What We Extracted |
+|--------|-------------------|
+| **600+ consulting decks** | McKinsey, BCG, Bain slide structures and standards |
+| **Nancy Duarte** | Sparkline narrative, STAR moments, Glance Test |
+| **Garr Reynolds** | Presentation Zen, signal-to-noise ratio |
+| **Carmine Gallo** | TED talk patterns, Rule of Three, 18-minute rule |
+| **Barbara Minto** | Pyramid Principle, SCQA framework, MECE logic |
+| **Edward Tufte** | Data-ink ratio, chartjunk elimination |
+| **Cole Nussbaumer Knaflic** | Storytelling with Data principles |
+| **10M+ views of YouTube content** | Analyst Academy, PowerPoint School, and more |
+
+All of it — **6,300+ lines of expert knowledge** — encoded into an agentic vector database.
+
+**Now Claude doesn't have to figure out presentations. The knowledge base already knows.**
 
 ---
 
-## Why This Exists
+## What You Actually Get
 
-**Claude out of the box makes mediocre presentations.** So does ChatGPT. So does every other AI.
+### Two Output Formats
 
-They give you generic bullet points, bland layouts, and zero understanding of what actually makes a presentation effective. They've never studied Nancy Duarte. They don't know McKinsey's slide principles. They can't tell you why a TED talk works.
+**HTML Presentations (Reveal.js)**
 
-**This library fixes that.**
+Modern, web-native slides that run in any browser:
 
-We encoded 6,300+ lines of expert knowledge from the world's best presentation minds:
+- Share via URL — just send a link
+- Works on any device — desktop, tablet, phone
+- Animations and transitions built-in
+- Speaker notes with `S` key
+- Fullscreen with `F` key
+- Looks like a polished online version of PowerPoint
 
-- **The consulting firms** — McKinsey, BCG, Bain slide standards
-- **The TED experts** — Chris Anderson, Carmine Gallo, Nancy Duarte
-- **The design masters** — Garr Reynolds, Edward Tufte, Barbara Minto
-- **The data viz specialists** — Cole Nussbaumer Knaflic, Scott Berinato
-- **600+ real consulting presentations** analyzed and distilled
+*Best for: Tech audiences, conferences, product demos, anything you want to share online*
 
-When you use this library, you're not getting generic AI output. You're getting presentations built on the same principles used by:
-- McKinsey consultants billing $500/hour
-- TED speakers with millions of views
-- Investment bankers closing billion-dollar deals
-- Steve Jobs launching the iPhone
+**PowerPoint (PPTX)**
 
----
+Traditional format that opens in Microsoft PowerPoint:
 
-## What Claude Alone Gives You vs. What This Library Gives You
+- Edit further if needed
+- Send to clients who expect PPTX
+- Print to PDF for handouts
+- Works offline
 
-| Aspect | Claude/ChatGPT Alone | Claude Presentation Master |
-|--------|---------------------|---------------------------|
-| **Slide structure** | Generic bullet points | SCQA framework (Situation, Complication, Question, Answer) — the same structure McKinsey uses |
-| **Titles** | Topic labels ("Q3 Revenue") | Action titles that communicate conclusions ("Q3 revenue exceeded targets by 23% driven by enterprise deals") |
-| **Word count** | Walls of text | Strict enforcement: 6-25 words for keynotes, 40-80 for business |
-| **Data visualization** | Basic charts | Tufte's data-ink ratio, Berinato's chart selection, direct labeling, callouts |
-| **Narrative flow** | Random order | Duarte's Sparkline (What Is → What Could Be → Call to Action) |
-| **Quality validation** | None | Real visual QA with Playwright screenshots — whitespace %, balance, contrast |
-| **Output** | Text only | Production-ready HTML (Reveal.js) or PowerPoint (PPTX) |
+*Best for: Board decks, client deliverables, corporate environments*
 
----
+### Two Presentation Modes
 
-## The Knowledge Base
+**Keynote Mode** — For inspiring and persuading
 
-This isn't just a template library. It's a **complete expert knowledge system** with 6,300+ lines of encoded wisdom.
-
-### Presentation Modes
-
-**Keynote Mode (TED-Style)**
-- 6-15 words per slide (Steve Jobs averaged 10)
+- 6-15 words per slide (like Steve Jobs)
 - 40%+ whitespace
 - One idea per slide
-- Emotional storytelling structure
-- Used for: Product launches, investor pitches, conference keynotes
+- Emotional narrative structure
+- Big visuals, minimal text
 
-**Business Mode (Consulting-Style)**
+*Use for: Product launches, investor pitches, conference talks, TED-style presentations*
+
+**Business Mode** — For informing and documenting
+
 - 40-80 words per slide
-- Action titles required (complete sentences that communicate conclusions)
-- Data with callouts (tell the audience what to see)
-- MECE structure (Mutually Exclusive, Collectively Exhaustive)
-- Used for: Board decks, strategy presentations, consulting deliverables
+- Action titles (full sentences that state conclusions)
+- Data with callouts
+- Structured with Pyramid Principle
+- Charts, tables, metrics grids
 
-### Expert Methodologies Encoded
-
-#### From McKinsey, BCG, Bain
-- **Pyramid Principle** — Lead with the answer, then support
-- **SCQA Framework** — Situation → Complication → Question → Answer
-- **Action Titles** — Headlines that communicate conclusions, not topics
-- **One Message Per Slide** — Each slide has exactly one job
-- **Chart Callouts** — Always tell the audience what to see in the data
-
-#### From Nancy Duarte (Slide:ology, Resonate)
-- **Sparkline Structure** — Oscillate between "What Is" and "What Could Be"
-- **STAR Moments** — Something They'll Always Remember (dramatic reveals)
-- **Glance Test** — Can you understand the slide in 3 seconds?
-- **Signal-to-Noise Ratio** — Maximize meaning, minimize clutter
-
-#### From Garr Reynolds (Presentation Zen)
-- **Simplicity** — When in doubt, leave it out
-- **Visual over Verbal** — Show, don't tell
-- **Restraint** — Resist the urge to add more
-- **Amplification Through Simplification** — Less is more
-
-#### From Carmine Gallo (Talk Like TED)
-- **Rule of Three** — Human memory works in threes
-- **18-Minute Rule** — Optimal presentation length
-- **Emotional Connection First** — Touch hearts before minds
-- **The Twitter Test** — Can you summarize in one sentence?
-
-#### From Edward Tufte (Data Visualization Pioneer)
-- **Data-Ink Ratio** — Maximize ink used for data, eliminate everything else
-- **Chartjunk Removal** — No 3D effects, no decorative gridlines, no clutter
-- **Small Multiples** — Same chart repeated for easy comparison
-- **Graphical Integrity** — Never distort data for visual effect
-
-#### From Barbara Minto (The Pyramid Principle)
-- **Top-Down Communication** — Lead with the conclusion
-- **MECE Grouping** — Mutually Exclusive, Collectively Exhaustive
-- **Logical Flow** — Ideas must follow logically from each other
-- **Vertical and Horizontal Logic** — Structure that works in both directions
-
-#### From Cole Nussbaumer Knaflic (Storytelling with Data)
-- **Context First** — Know your audience before designing
-- **Eliminate Clutter** — Remove everything that doesn't add value
-- **Focus Attention** — Use preattentive attributes to guide the eye
-- **Tell a Story** — Beginning, middle, end — even for data
-
-### Visual Design System
-
-The library includes complete color palettes tested for WCAG accessibility:
-
-- **Executive Professional** — Warm gray, navy, and orange for board presentations
-- **Consulting Classic** — Cream background, the McKinsey/BCG look
-- **Modern Business** — Light gray and teal for tech companies
-- **Strategy & Growth** — Warm neutrals with green accents
-- **Dark Executive** — Dark mode for screen presentations
-
-Typography rules:
-- **Keynote**: 54-72px titles, 36-48px headlines, 24-32px body
-- **Business**: 18-22px action titles, 11-14px body, always 2 fonts maximum
-- **Accessibility**: 18pt minimum for body text, 30pt+ for projected
-
-### Consulting Visual Elements
-
-- **Harvey Balls** — Circular icons showing completion (●◐○)
-- **Traffic Lights** — Red/Yellow/Green status indicators
-- **Icon Systems** — Consistent icon families from Font Awesome, Material
-- **Arrow Conventions** — Solid for direct, dotted for optional
-
----
-
-## Output Formats
-
-### HTML Presentations (Reveal.js)
-
-Modern, web-native presentations that work in any browser.
-
-```
-✓ No software required — runs in Chrome, Safari, Firefox
-✓ Share via URL — just send a link
-✓ Responsive — works on desktop, tablet, mobile
-✓ Interactive — animations, videos, live code demos
-✓ Keyboard shortcuts — F for fullscreen, S for speaker notes, ESC for overview
-✓ Version control — store in Git, track changes
-✓ Embed anywhere — put in websites, documentation, wikis
-```
-
-**Best for:** Tech audiences, conference talks, product demos, developer presentations, portfolio websites
-
-**Features included:**
-- Multiple themes (white, black, minimal, corporate)
-- Slide transitions (fade, slide, zoom, none for consulting style)
-- Speaker notes view
-- PDF export
-- Syntax highlighting for code
-- Chart.js integration for data visualization
-- Mermaid diagrams for flowcharts
-
-### PowerPoint (PPTX)
-
-Traditional downloadable format for corporate environments.
-
-```
-✓ Universal standard — everyone has PowerPoint
-✓ Offline editing — no internet required
-✓ Client expects it — consulting deliverables need PPTX
-✓ Rich animations — full PowerPoint animation support
-✓ Print to PDF — easy handouts
-```
-
-**Best for:** Board decks, consulting deliverables, client presentations, corporate environments
-
-**Features included:**
-- Precise element positioning
-- Master slide layouts
-- Speaker notes
-- Chart embedding
-- Font embedding
+*Use for: Board meetings, strategy reviews, consulting deliverables, quarterly reports*
 
 ---
 
@@ -260,191 +136,227 @@ Traditional downloadable format for corporate environments.
 
 ```bash
 npm install claude-presentation-master
-```
-
-After installation, Playwright needs browser binaries:
-
-```bash
 npx playwright install chromium
 ```
+
+That's it. You're ready.
 
 ---
 
 ## Quick Start
 
-### CLI Usage
+### From the Command Line
 
 ```bash
-# Generate a keynote-style HTML presentation
-cpm generate my-content.md --mode keynote --format html
+# Turn your markdown notes into a keynote-style HTML presentation
+cpm generate project-notes.md --mode keynote --format html
 
-# Generate a consulting-style PowerPoint
-cpm generate strategy-deck.md --mode business --format pptx
+# Create a consulting-style PowerPoint deck
+cpm generate strategy.md --mode business --format pptx
 
-# Generate both formats
-cpm generate pitch.md --mode keynote --format html,pptx
-
-# Validate an existing presentation
-cpm validate presentation.html --mode keynote
+# Generate both formats at once
+cpm generate quarterly-review.md --mode business --format html,pptx
 ```
 
-### Programmatic API
+### From Your Code
 
 ```typescript
 import { generate } from 'claude-presentation-master';
-import { writeFileSync } from 'fs';
 
 const result = await generate({
   content: `
-# Q4 Strategy Presentation
+# Q4 Strategy Update
 
-## Current Situation
-Revenue grew 23% YoY but market share declined 2 points.
+## Where We Are
+Revenue up 23% YoY. Market share down 2 points.
 
 ## The Challenge
-Three new competitors entered our core market in Q3.
-Customer acquisition costs increased 40%.
+Three new competitors launched in Q3.
+Customer acquisition costs up 40%.
 
-## Our Response
-1. Launch enterprise tier by Q2
-2. Expand into adjacent verticals
-3. Reduce CAC through product-led growth
+## What We're Doing
+1. Launch enterprise tier in Q2
+2. Expand into adjacent markets
+3. Shift to product-led growth
 
-## Expected Outcome
-Regain market share leadership within 18 months.
+## Expected Result
+Market share leadership within 18 months.
   `,
   contentType: 'markdown',
-  mode: 'business',        // or 'keynote'
+  mode: 'business',
   format: ['html', 'pptx'],
-  title: 'Q4 Strategy Review',
-  author: 'Strategy Team',
-  theme: 'consulting-classic',
-  qaThreshold: 95          // Minimum quality score
+  title: 'Q4 Strategy Update'
 });
 
-console.log(`Quality Score: ${result.score}/100`);
-console.log(`Slides: ${result.metadata.slideCount}`);
-console.log(`Frameworks Applied: ${result.metadata.frameworks.join(', ')}`);
-
-// Save outputs
-if (result.outputs.html) {
-  writeFileSync('presentation.html', result.outputs.html);
-}
-if (result.outputs.pptx) {
-  writeFileSync('presentation.pptx', result.outputs.pptx);
-}
+// result.outputs.html — Complete HTML presentation
+// result.outputs.pptx — PowerPoint file buffer
+// result.score — Quality score (must be 95+ to pass)
 ```
+
+---
+
+## The Knowledge Base
+
+This isn't a template library. It's a **complete expert system** for presentations.
+
+### What's Encoded
+
+**From McKinsey, BCG, Bain:**
+- Pyramid Principle — Lead with the answer
+- SCQA Framework — Situation → Complication → Question → Answer
+- Action Titles — "Revenue grew 23%" not "Revenue Analysis"
+- One Message Per Slide — Every slide has exactly one job
+- Chart Callouts — Always tell the audience what to see
+
+**From Nancy Duarte (Slide:ology, Resonate):**
+- Sparkline Structure — Alternate between "what is" and "what could be"
+- STAR Moments — Something They'll Always Remember
+- Glance Test — Understand it in 3 seconds or less
+- Signal-to-Noise — Maximize meaning, eliminate clutter
+
+**From Garr Reynolds (Presentation Zen):**
+- Simplicity — When in doubt, leave it out
+- Restraint — Resist the urge to add
+- Visual over Verbal — Show, don't tell
+
+**From Carmine Gallo (Talk Like TED):**
+- Rule of Three — Human memory works in threes
+- 18-Minute Rule — Optimal presentation length
+- Emotional Connection — Touch hearts before minds
+
+**From Edward Tufte:**
+- Data-Ink Ratio — Every drop of ink should represent data
+- Chartjunk Elimination — No 3D effects, no decorative gridlines
+- Graphical Integrity — Never distort data for visual effect
+
+**From Barbara Minto (The Pyramid Principle):**
+- Top-Down Communication — Conclusion first, support second
+- MECE Grouping — Mutually Exclusive, Collectively Exhaustive
+- Vertical Logic — Each level supports the one above
+
+### Design System
+
+Complete color palettes tested for accessibility:
+- **Consulting Classic** — Cream background, navy text (McKinsey/BCG look)
+- **Executive Professional** — Warm gray, sophisticated
+- **Modern Tech** — Light with teal accents
+- **Dark Executive** — Dark mode for screens
+
+Typography rules:
+- Keynote: 54-72px titles, max 2 fonts
+- Business: 18-22px action titles, 11-14px body
+- Accessibility: 18pt minimum, 30pt+ for projection
 
 ---
 
 ## Quality Validation
 
-Every presentation is validated against a 100-point rubric using **real visual analysis** with Playwright:
+Every presentation passes through real visual QA using Playwright:
 
-| Category | Weight | What's Measured |
-|----------|--------|-----------------|
-| **Visual Quality** | 35% | Whitespace percentage, layout balance, contrast ratio, font count, color count |
-| **Content Quality** | 30% | Word limits, action titles, glance test, signal-to-noise, one-idea rule |
-| **Expert Compliance** | 25% | Duarte, Reynolds, Gallo, Anderson, Minto principles |
-| **Accessibility** | 10% | WCAG level, contrast issues, font sizes, color-blind safety |
+| Check | What's Measured |
+|-------|-----------------|
+| **Whitespace** | Percentage of empty space (40%+ for keynote, 25%+ for business) |
+| **Balance** | Center of mass — is the layout visually balanced? |
+| **Contrast** | WCAG 4.5:1 minimum for text readability |
+| **Word Count** | Enforced limits per slide type |
+| **Font Count** | Maximum 2 font families |
+| **Color Count** | Maximum 5 colors |
 
-**The library rejects presentations scoring below 95/100** and tells you exactly what to fix:
+**Presentations must score 95/100 or higher.** If they don't, you get a specific list of what to fix.
 
-```typescript
-try {
-  const result = await generate(config);
-} catch (error) {
-  if (error instanceof QAFailureError) {
-    console.log(`Score: ${error.score}/100`);
-    console.log('Issues to fix:');
-    error.getIssues().forEach(issue => {
-      console.log(`  - ${issue}`);
-    });
-  }
-}
-```
+---
+
+## The Difference
+
+| Without This Library | With This Library |
+|---------------------|-------------------|
+| Ask Claude for slides, get bullet point soup | Structured presentation following expert frameworks |
+| Manually fix formatting for hours | Production-ready output in seconds |
+| Hope it looks professional | 95/100 quality bar enforced |
+| Generic templates | 6,300+ lines of encoded expertise |
+| Text only | HTML or PowerPoint output |
+| No validation | Real visual QA with screenshots |
+
+---
+
+## Use Cases
+
+**You're building a product strategy in Claude**
+→ Generate an investor pitch deck in keynote mode
+
+**You've analyzed Q4 performance**
+→ Create a board presentation in business mode
+
+**You're planning a product launch**
+→ Build a TED-style keynote for the all-hands
+
+**You've done competitive research**
+→ Turn it into a consulting-style strategy deck
+
+**You have meeting notes that need to become a presentation**
+→ One command, done
 
 ---
 
 ## Themes
 
-| Theme | Style | Best For |
-|-------|-------|----------|
+| Theme | Look | Best For |
+|-------|------|----------|
 | `default` | Clean, professional | General use |
-| `consulting-classic` | Cream, navy — McKinsey/BCG style | Consulting deliverables |
-| `executive-professional` | Warm gray, sophisticated | Board presentations |
-| `modern-tech` | Light with teal accents | Tech companies, startups |
-| `minimal` | Maximum whitespace, B&W | Design-focused |
+| `consulting-classic` | Cream, navy | McKinsey/BCG style |
+| `modern-tech` | Light, teal accents | Startups, tech |
+| `minimal` | Maximum whitespace | Design-focused |
 | `dark-executive` | Dark mode | Screen presentations |
 
 ---
 
 ## Slide Types
 
-### Keynote Mode
-- **Big Idea** — Single powerful statement, large text
-- **Single Statement** — One sentence, centered
-- **Full Image** — Full-bleed image with text overlay
-- **Big Number** — Dramatic statistic with context
-- **Quote** — Blockquote with attribution
+**Keynote Mode:**
+Big Idea • Single Statement • Full Image • Big Number • Quote
 
-### Business Mode
-- **Agenda** — Numbered topics with timing
-- **Bullet Points** — Title with supporting points (max 5)
-- **Two Column** — Split layout for comparison
-- **Metrics Grid** — KPI dashboard layout
-- **Timeline** — Chronological events
-- **Process** — Step-by-step with arrows
-- **Comparison** — Side-by-side analysis
-- **Case Study** — Challenge/Solution/Results format
+**Business Mode:**
+Agenda • Bullet Points • Two Column • Three Column • Metrics Grid • Timeline • Process Flow • Comparison • Case Study • Pricing Table
 
 ---
 
-## How It's Different
+## FAQ
 
-| Other AI Tools | Claude Presentation Master |
-|----------------|---------------------------|
-| Generate generic slides | Apply McKinsey/BCG slide principles |
-| No quality control | 95/100 minimum score enforced |
-| Text output only | Production-ready HTML or PPTX |
-| No visual validation | Playwright screenshots analyze every slide |
-| Generic templates | 6,300+ lines of expert methodology |
-| Hope it looks good | Measure whitespace, balance, contrast |
-| No narrative structure | SCQA, Sparkline, Pyramid Principle |
-| Bullet point hell | Strict word limits per mode |
+**Does this require an API key?**
+No. The knowledge base is bundled with the package. Works 100% offline.
 
----
+**Can I edit the output?**
+Yes. HTML is just HTML. PPTX opens in PowerPoint for further editing.
 
-## Roadmap
+**What if I don't like the result?**
+Adjust your input content or lower the quality threshold (not recommended).
 
-- [ ] PDF export
-- [ ] Google Slides export
-- [ ] Additional themes
-- [ ] Interactive chart editing
-- [ ] AI-powered content suggestions (optional)
-- [ ] Collaborative editing
+**Does it work with Claude Code?**
+Yes — that's exactly what it's designed for. Generate presentations from your project context.
 
 ---
 
 ## License
 
-MIT License — free to use, modify, and distribute.
+MIT — free to use, modify, and distribute.
 
 ---
 
 ## Author
 
-**Stuart Kerr**
-<stuart@isovision.ai>
-[Isovision.ai](https://isovision.ai)
+**Stuart Kerr** — [Isovision.ai](https://isovision.ai)
 
 ---
 
 <div align="center">
 
-**Built on methodologies from the world's best presentation experts.**
+**Stop fighting with slides. Start presenting.**
 
-McKinsey • BCG • Bain • Nancy Duarte • Garr Reynolds • Carmine Gallo
-Chris Anderson • Barbara Minto • Edward Tufte • Cole Nussbaumer Knaflic
+```bash
+npm install claude-presentation-master
+```
+
+Built on methodologies from McKinsey • BCG • Bain • Nancy Duarte • Garr Reynolds
+Carmine Gallo • Chris Anderson • Barbara Minto • Edward Tufte
 
 </div>
