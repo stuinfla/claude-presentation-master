@@ -32,6 +32,24 @@ export { ScoreCalculator } from './core/ScoreCalculator.js';
 // =============================================================================
 
 export { QAEngine } from './qa/QAEngine.js';
+export { PPTXValidator } from './qa/PPTXValidator.js';
+export { AccessibilityValidator } from './qa/AccessibilityValidator.js';
+export { AutoRemediation } from './qa/AutoRemediation.js';
+export { HTMLLayoutValidator } from './qa/HTMLLayoutValidator.js';
+export { HallucinationDetector } from './qa/HallucinationDetector.js';
+
+// =============================================================================
+// EXPORTS: Type Detection (Granular Presentation Types)
+// =============================================================================
+
+export { TypeDetector, PRESENTATION_TYPE_RULES } from './core/TypeDetector.js';
+
+// =============================================================================
+// EXPORTS: Strategy System
+// =============================================================================
+
+export { StrategyFactory } from './strategies/StrategyFactory.js';
+export type { ExecutionStrategy, SlideBlueprint, ContentTransform } from './strategies/types.js';
 
 // =============================================================================
 // EXPORTS: Generators
@@ -58,6 +76,8 @@ export { KnowledgeBase, getKnowledgeBase } from './knowledge/KnowledgeBase.js';
 
 import { PresentationEngine } from './core/PresentationEngine.js';
 import { QAEngine } from './qa/QAEngine.js';
+import { PPTXValidator } from './qa/PPTXValidator.js';
+import { AccessibilityValidator } from './qa/AccessibilityValidator.js';
 import type { PresentationConfig, PresentationResult, QAResults } from './types/index.js';
 
 /**
@@ -129,7 +149,7 @@ export async function validate(
 /**
  * Get the version of the package.
  */
-export const VERSION = '1.0.0';
+export const VERSION = '2.0.0';
 
 /**
  * Default export for convenience.
@@ -139,5 +159,7 @@ export default {
   validate,
   PresentationEngine,
   QAEngine,
+  PPTXValidator,
+  AccessibilityValidator,
   VERSION
 };

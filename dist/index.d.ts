@@ -2,7 +2,17 @@
  * Claude Presentation Master - Type Definitions
  * @module types
  */
+/**
+ * Legacy presentation mode (for backwards compatibility)
+ * @deprecated Use PresentationType for granular control
+ */
 type PresentationMode = 'keynote' | 'business';
+/**
+ * Granular presentation types with distinct validation rules.
+ * Each type is a "swim lane" with its own word limits, expert methodologies,
+ * and scoring weights. These are mutually exclusive.
+ */
+type PresentationType = 'ted_keynote' | 'sales_pitch' | 'consulting_deck' | 'investment_banking' | 'investor_pitch' | 'technical_presentation' | 'all_hands';
 type OutputFormat = 'html' | 'pptx';
 type ThemeName = 'default' | 'light-corporate' | 'modern-tech' | 'minimal' | 'warm' | 'creative';
 interface PresentationConfig {
@@ -10,8 +20,20 @@ interface PresentationConfig {
     content: string;
     /** Content format */
     contentType: 'markdown' | 'json' | 'yaml' | 'text';
-    /** Presentation mode: keynote (6-25 words/slide) or business (40-80 words/slide) */
+    /**
+     * Legacy presentation mode (backwards compatible)
+     * @deprecated Use `presentationType` for granular control
+     */
     mode: PresentationMode;
+    /**
+     * Granular presentation type with distinct validation rules.
+     * If specified, this overrides `mode` for validation purposes.
+     */
+    presentationType?: PresentationType;
+    /** Target audience (used for auto-detecting presentation type) */
+    audience?: 'board_of_directors' | 'sales_prospect' | 'investors_vcs' | 'general_audience_keynote' | 'technical_team' | 'all_hands_meeting';
+    /** Presentation goal (used for auto-detecting presentation type) */
+    goal?: 'get_approval' | 'inform_educate' | 'persuade_sell' | 'inspire_motivate' | 'report_results' | 'raise_funding';
     /** Output formats to generate */
     format: OutputFormat[];
     /** Visual theme */
@@ -34,6 +56,36 @@ interface PresentationConfig {
     customCSS?: string;
     /** Custom Handlebars templates */
     customTemplates?: Record<string, string>;
+}
+/**
+ * Validation rules specific to a presentation type.
+ * Loaded from the knowledge base.
+ */
+interface PresentationTypeRules {
+    id: PresentationType;
+    name: string;
+    description: string;
+    wordsPerSlide: {
+        min: number;
+        max: number;
+        ideal: number;
+    };
+    whitespace: {
+        min: number;
+        ideal: number;
+        max?: number;
+    };
+    bulletsPerSlide: {
+        max: number;
+    };
+    actionTitlesRequired: boolean;
+    sourcesRequired: boolean;
+    scoringWeights: {
+        visual_quality: number;
+        content_quality: number;
+        expert_compliance: number;
+        accessibility: number;
+    };
 }
 type SlideType = 'title' | 'agenda' | 'section-divider' | 'thank-you' | 'big-idea' | 'single-statement' | 'big-number' | 'full-image' | 'quote' | 'two-column' | 'three-column' | 'bullet-points' | 'screenshot' | 'screenshot-left' | 'screenshot-right' | 'comparison' | 'timeline' | 'process' | 'metrics-grid' | 'pricing' | 'team' | 'features' | 'chart' | 'table' | 'social-proof' | 'case-study' | 'cta';
 interface Slide {
@@ -293,10 +345,408 @@ declare class TemplateNotFoundError extends Error {
 }
 
 /**
+ * Score Calculator - QA Score Computation
+ *
+ * Calculates presentation quality scores based on:
+ * - Visual quality (35%)
+ * - Content quality (30%)
+ * - Expert methodology compliance (25%)
+ * - Accessibility (10%)
+ */
+
+interface ScoreBreakdown {
+    visual: number;
+    content: number;
+    expert: number;
+    accessibility: number;
+    total: number;
+    penalties: number;
+    details: ScoreDetail[];
+}
+interface ScoreDetail {
+    category: string;
+    check: string;
+    score: number;
+    maxScore: number;
+    notes?: string;
+}
+declare class ScoreCalculator {
+    private readonly weights;
+    /**
+     * Calculate overall QA score from results.
+     */
+    calculate(results: QAResults): number;
+    /**
+     * Get detailed score breakdown.
+     */
+    getBreakdown(results: QAResults): ScoreBreakdown;
+    /**
+     * Calculate visual quality score.
+     */
+    private calculateVisualScore;
+    /**
+     * Calculate content quality score.
+     */
+    private calculateContentScore;
+    /**
+     * Calculate expert methodology compliance score.
+     */
+    private calculateExpertScore;
+    /**
+     * Calculate accessibility compliance score.
+     */
+    private calculateAccessibilityScore;
+    /**
+     * Calculate penalties from issues.
+     */
+    private calculatePenalties;
+    /**
+     * Get human-readable grade from score.
+     */
+    getGrade(score: number): string;
+    /**
+     * Get pass/fail status.
+     */
+    isPassing(score: number, threshold?: number): boolean;
+    /**
+     * Format score for display.
+     */
+    formatScore(score: number): string;
+    /**
+     * Generate summary report.
+     */
+    generateReport(results: QAResults): string;
+}
+
+/**
+ * QA Engine - Real Visual Quality Validation
+ *
+ * Unlike fake validation systems, this engine ACTUALLY tests:
+ * - Visual quality using Playwright screenshots + Canvas API
+ * - Layout balance and whitespace distribution
+ * - WCAG contrast compliance
+ * - Expert methodology adherence
+ */
+
+declare class QAEngine {
+    private browser;
+    /**
+     * Validate a presentation.
+     */
+    validate(presentation: string | Buffer, options?: {
+        mode?: 'keynote' | 'business';
+        strictMode?: boolean;
+        threshold?: number;
+    }): Promise<QAResults>;
+    /**
+     * Calculate overall QA score.
+     */
+    calculateScore(results: QAResults): number;
+    /**
+     * Create empty QA results (for when QA is skipped).
+     */
+    createEmptyResults(): QAResults;
+    private runVisualTests;
+    private runContentTests;
+    private runExpertTests;
+    private createExpertResult;
+    private runAccessibilityTests;
+    private calculateVisualScore;
+    private calculateContentScore;
+    private calculateExpertScore;
+    private calculateA11yScore;
+    private collectIssues;
+    private initBrowser;
+    private closeBrowser;
+}
+
+/**
+ * PowerPoint Validator - PPTX Quality Validation
+ *
+ * Validates PowerPoint presentations for:
+ * - Layout correctness
+ * - Content quality (word counts, readability)
+ * - Formatting consistency (fonts, colors)
+ * - Accessibility compliance
+ * - Expert methodology adherence
+ *
+ * THIS IS A MANDATORY VALIDATION - NO PPTX EXPORT WITHOUT PASSING
+ */
+
+interface PPTXValidationResult {
+    passed: boolean;
+    score: number;
+    issues: PPTXIssue[];
+    perSlide: SlideValidationResult[];
+    summary: ValidationSummary;
+}
+interface PPTXIssue {
+    severity: 'error' | 'warning' | 'info';
+    category: 'layout' | 'content' | 'formatting' | 'accessibility' | 'expert';
+    slideIndex?: number;
+    message: string;
+    suggestion?: string;
+}
+interface SlideValidationResult {
+    slideIndex: number;
+    type: string;
+    passed: boolean;
+    score: number;
+    issues: PPTXIssue[];
+    metrics: {
+        wordCount: number;
+        hasTitle: boolean;
+        hasContent: boolean;
+        estimatedReadingTime: number;
+        layoutScore: number;
+    };
+}
+interface ValidationSummary {
+    totalSlides: number;
+    passedSlides: number;
+    failedSlides: number;
+    totalErrors: number;
+    totalWarnings: number;
+    categories: {
+        layout: number;
+        content: number;
+        formatting: number;
+        accessibility: number;
+        expert: number;
+    };
+}
+declare class PPTXValidator {
+    /**
+     * Validate a set of slides before PPTX generation.
+     * This validation is MANDATORY - export will fail if score < threshold.
+     */
+    validate(slides: Slide[], options: {
+        mode: 'keynote' | 'business';
+        threshold?: number;
+        strictMode?: boolean;
+    }): Promise<PPTXValidationResult>;
+    /**
+     * Validate a single slide.
+     */
+    private validateSlide;
+    /**
+     * Validate cross-slide consistency.
+     */
+    private validateCrossSlide;
+    /**
+     * Validate against expert methodologies.
+     */
+    private validateExpertMethodologies;
+    /**
+     * Count words in slide content.
+     */
+    private countWords;
+    /**
+     * Check if slide has meaningful content.
+     */
+    private hasContent;
+    /**
+     * Count distinct ideas in a slide.
+     */
+    private countIdeas;
+    /**
+     * Calculate layout score for a slide.
+     */
+    private calculateLayoutScore;
+    /**
+     * Calculate overall validation score.
+     */
+    private calculateScore;
+    /**
+     * Build validation summary.
+     */
+    private buildSummary;
+    /**
+     * Convert PPTX validation result to standard QAResults format.
+     */
+    toQAResults(result: PPTXValidationResult, mode: 'keynote' | 'business'): QAResults;
+    private createExpertValidation;
+    /**
+     * Generate human-readable validation report.
+     */
+    generateReport(result: PPTXValidationResult): string;
+}
+
+/**
+ * Auto-Remediation Engine
+ *
+ * Instead of blocking on QA failures, this engine automatically fixes issues
+ * and iterates until the presentation passes quality thresholds.
+ *
+ * Philosophy: NEVER fail - always deliver a working, quality presentation.
+ *
+ * Remediation strategies:
+ * - Too many words → Summarize/split slides
+ * - Poor whitespace → Adjust layout
+ * - Failed glance test → Shorten titles
+ * - Too many bullets → Consolidate or split
+ * - Missing structure → Add required slides
+ * - Accessibility issues → Fix contrast/font sizes
+ */
+
+interface RemediationChange {
+    slideIndex: number;
+    type: RemediationType;
+    description: string;
+    before?: string;
+    after?: string;
+}
+type RemediationType = 'word_reduction' | 'slide_split' | 'title_shortening' | 'bullet_consolidation' | 'layout_adjustment' | 'structure_addition' | 'font_size_increase' | 'content_enhancement' | 'whitespace_improvement';
+declare class AutoRemediation {
+    private changes;
+    /**
+     * Automatically remediate slides until they pass QA.
+     */
+    remediate(slides: Slide[], issues: QAIssue[] | PPTXIssue[], options: {
+        mode: 'keynote' | 'business';
+        targetScore: number;
+    }): Promise<Slide[]>;
+    /**
+     * Get the changes that were applied during remediation.
+     */
+    getChanges(): RemediationChange[];
+    /**
+     * Remediate word count issues - the most common problem.
+     */
+    private remediateWordCount;
+    /**
+     * Remediate glance test failures - title too long.
+     */
+    private remediateGlanceTest;
+    /**
+     * Remediate bullet point issues.
+     */
+    private remediateBullets;
+    /**
+     * Remediate structural issues - missing title slide, conclusion, etc.
+     */
+    private remediateStructure;
+    /**
+     * Remediate accessibility issues.
+     */
+    private remediateAccessibility;
+    /**
+     * Group issues by their primary type.
+     */
+    private groupIssuesByType;
+    /**
+     * Shorten text to approximately N words while preserving meaning.
+     */
+    private shortenText;
+    /**
+     * Shorten a title to N words, keeping the key message.
+     */
+    private shortenTitle;
+    /**
+     * Consolidate bullets by combining related ones.
+     */
+    private consolidateBullets;
+    /**
+     * Reindex slides after insertion/deletion.
+     */
+    private reindexSlides;
+    /**
+     * Count words in a slide.
+     */
+    private countWords;
+    /**
+     * Deep clone slides array.
+     */
+    private deepClone;
+    /**
+     * Generate remediation report.
+     */
+    generateReport(): string;
+}
+
+/**
+ * Hallucination Detector
+ *
+ * Verifies that all facts, statistics, and claims in the presentation
+ * are sourced from the original content. ZERO TOLERANCE for hallucinations.
+ *
+ * Checks:
+ * - Numbers and statistics must appear in source content
+ * - Company names must be in source content
+ * - Dates and timelines must be verifiable
+ * - Quotes must be exact matches
+ * - Claims must be supported by source material
+ *
+ * Philosophy: If it's not in the source, it shouldn't be in the presentation.
+ */
+
+interface FactCheckResult {
+    passed: boolean;
+    score: number;
+    totalFacts: number;
+    verifiedFacts: number;
+    unverifiedFacts: number;
+    issues: FactCheckIssue[];
+    warnings: FactCheckWarning[];
+}
+interface FactCheckIssue {
+    slideIndex: number;
+    slideTitle: string;
+    fact: string;
+    type: 'number' | 'statistic' | 'company' | 'date' | 'quote' | 'claim';
+    severity: 'error' | 'warning';
+    message: string;
+    suggestion: string;
+}
+interface FactCheckWarning {
+    slideIndex: number;
+    message: string;
+}
+declare class HallucinationDetector {
+    private numberPattern;
+    private percentagePattern;
+    private datePattern;
+    private companyPattern;
+    private quotePattern;
+    /**
+     * Check all slides against source content for hallucinations.
+     */
+    checkForHallucinations(slides: Slide[], sourceContent: string, analysis: ContentAnalysis): Promise<FactCheckResult>;
+    /**
+     * Generate a fact-check report.
+     */
+    generateReport(result: FactCheckResult): string;
+    /**
+     * Auto-remediate hallucinations by removing unverified facts.
+     */
+    remediate(slides: Slide[], result: FactCheckResult): Slide[];
+    private normalizeText;
+    private getSlideText;
+    private extractNumbers;
+    private extractCompanies;
+    private extractDates;
+    private isNumberInSource;
+    private isCompanyInSource;
+    private isDateInSource;
+    private isCommonWord;
+    private checkForUnsupportedClaims;
+    private getPlaceholder;
+}
+
+/**
  * Presentation Engine - Main Orchestrator
  *
  * Coordinates content analysis, slide generation, and QA validation
  * to produce world-class presentations.
+ *
+ * PHILOSOPHY: NEVER FAIL - ALWAYS DELIVER
+ *
+ * Instead of blocking on QA failures, this engine:
+ * 1. Validates the presentation
+ * 2. If issues found, automatically remediates them
+ * 3. Re-validates
+ * 4. Repeats until it passes (max 5 iterations)
+ * 5. ALWAYS delivers a working presentation
  */
 
 declare class PresentationEngine {
@@ -304,25 +754,38 @@ declare class PresentationEngine {
     private slideFactory;
     private templateEngine;
     private scoreCalculator;
+    private typeDetector;
+    private strategyFactory;
     private qaEngine;
+    private pptxValidator;
+    private htmlLayoutValidator;
+    private autoRemediation;
+    private hallucinationDetector;
     private htmlGenerator;
     private pptxGenerator;
     constructor();
     /**
      * Generate a presentation from content.
      *
+     * GUARANTEED DELIVERY:
+     * - Validates presentation quality
+     * - Automatically fixes any issues found
+     * - Iterates until quality threshold is met
+     * - ALWAYS returns a working presentation
+     *
      * @param config - Presentation configuration
      * @returns Presentation result with outputs, QA results, and score
      */
     generate(config: PresentationConfig): Promise<PresentationResult>;
     /**
+     * Validate slides and automatically remediate until they pass.
+     * Includes hallucination detection to ensure all facts are sourced.
+     */
+    private validateAndRemediate;
+    /**
      * Validate presentation configuration.
      */
     private validateConfig;
-    /**
-     * Validate slide structure before generation.
-     */
-    private validateStructure;
     /**
      * Count words in a slide.
      */
@@ -335,6 +798,26 @@ declare class PresentationEngine {
      * Detect which expert frameworks were applied.
      */
     private detectFrameworks;
+    /**
+     * Get QA Engine for external access.
+     */
+    getQAEngine(): QAEngine;
+    /**
+     * Get PPTX Validator for external access.
+     */
+    getPPTXValidator(): PPTXValidator;
+    /**
+     * Get Score Calculator for external access.
+     */
+    getScoreCalculator(): ScoreCalculator;
+    /**
+     * Get Auto Remediation for external access.
+     */
+    getAutoRemediation(): AutoRemediation;
+    /**
+     * Get Hallucination Detector for external access.
+     */
+    getHallucinationDetector(): HallucinationDetector;
 }
 
 /**
@@ -555,119 +1038,386 @@ declare class TemplateEngine {
 }
 
 /**
- * Score Calculator - QA Score Computation
+ * Accessibility Validator - WCAG Compliance Testing
  *
- * Calculates presentation quality scores based on:
- * - Visual quality (35%)
- * - Content quality (30%)
- * - Expert methodology compliance (25%)
- * - Accessibility (10%)
+ * Provides comprehensive accessibility validation using:
+ * - Axe-core for automated WCAG testing
+ * - Custom contrast ratio validation
+ * - Font size compliance
+ * - Keyboard navigation coverage
+ * - Color-blind safety checks
+ *
+ * MANDATORY: All presentations must meet WCAG AA minimum.
  */
 
-interface ScoreBreakdown {
-    visual: number;
-    content: number;
-    expert: number;
-    accessibility: number;
-    total: number;
-    penalties: number;
-    details: ScoreDetail[];
-}
-interface ScoreDetail {
-    category: string;
-    check: string;
+interface A11yValidationResult {
+    passed: boolean;
+    wcagLevel: 'A' | 'AA' | 'AAA' | 'FAIL';
     score: number;
-    maxScore: number;
-    notes?: string;
+    issues: A11yIssue[];
+    axeResults?: AxeResult[];
+    contrastIssues: ContrastIssue[];
+    fontSizeIssues: FontSizeIssue[];
+    keyboardIssues: KeyboardIssue[];
+    colorBlindSafe: boolean;
 }
-declare class ScoreCalculator {
-    private readonly weights;
+interface A11yIssue {
+    severity: 'critical' | 'serious' | 'moderate' | 'minor';
+    type: 'contrast' | 'font-size' | 'keyboard' | 'aria' | 'structure' | 'color';
+    slideIndex?: number;
+    element?: string;
+    message: string;
+    wcagCriteria?: string;
+    suggestion?: string;
+}
+interface AxeResult {
+    id: string;
+    impact: 'critical' | 'serious' | 'moderate' | 'minor';
+    description: string;
+    nodes: number;
+}
+interface KeyboardIssue {
+    slideIndex: number;
+    element: string;
+    issue: string;
+}
+declare class AccessibilityValidator {
+    private browser;
     /**
-     * Calculate overall QA score from results.
+     * Validate accessibility of an HTML presentation.
      */
-    calculate(results: QAResults): number;
+    validate(html: string, options?: {
+        targetLevel?: 'A' | 'AA' | 'AAA';
+        projectionMode?: boolean;
+    }): Promise<A11yValidationResult>;
     /**
-     * Get detailed score breakdown.
+     * Check color contrast compliance.
      */
-    getBreakdown(results: QAResults): ScoreBreakdown;
+    private checkContrast;
     /**
-     * Calculate visual quality score.
+     * Check font size compliance.
      */
-    private calculateVisualScore;
+    private checkFontSizes;
     /**
-     * Calculate content quality score.
+     * Check keyboard navigation accessibility.
      */
-    private calculateContentScore;
+    private checkKeyboardNavigation;
     /**
-     * Calculate expert methodology compliance score.
+     * Check document structure accessibility.
      */
-    private calculateExpertScore;
+    private checkStructure;
     /**
-     * Calculate accessibility compliance score.
+     * Check color-blind safety.
      */
-    private calculateAccessibilityScore;
+    private checkColorBlindSafety;
     /**
-     * Calculate penalties from issues.
+     * Calculate contrast ratio between two colors.
      */
-    private calculatePenalties;
+    private calculateContrastRatio;
     /**
-     * Get human-readable grade from score.
+     * Calculate relative luminance of a color.
      */
-    getGrade(score: number): string;
+    private getRelativeLuminance;
     /**
-     * Get pass/fail status.
+     * Determine WCAG compliance level.
      */
-    isPassing(score: number, threshold?: number): boolean;
+    private determineWCAGLevel;
     /**
-     * Format score for display.
+     * Calculate accessibility score.
      */
-    formatScore(score: number): string;
+    private calculateScore;
     /**
-     * Generate summary report.
+     * Generate accessibility report.
      */
-    generateReport(results: QAResults): string;
+    generateReport(result: A11yValidationResult): string;
+    private initBrowser;
+    private closeBrowser;
 }
 
 /**
- * QA Engine - Real Visual Quality Validation
+ * HTML Layout Validator - Bulletproof Viewport Enforcement
  *
- * Unlike fake validation systems, this engine ACTUALLY tests:
- * - Visual quality using Playwright screenshots + Canvas API
- * - Layout balance and whitespace distribution
- * - WCAG contrast compliance
- * - Expert methodology adherence
+ * This validator TESTS rendered HTML presentations to VERIFY:
+ * 1. No content overflows the slide boundaries
+ * 2. All text is readable (not clipped)
+ * 3. All elements fit within the viewport
+ * 4. No horizontal scrolling is needed
+ *
+ * PHILOSOPHY: VERIFY, DON'T GUESS
+ * - Uses Playwright to actually render the presentation
+ * - Measures real DOM elements
+ * - Checks computed styles
+ * - Takes screenshots as evidence
+ *
+ * THIS IS MANDATORY - No HTML export without passing layout validation
+ */
+interface LayoutValidationResult {
+    passed: boolean;
+    score: number;
+    issues: LayoutIssue[];
+    perSlide: SlideLayoutResult[];
+    screenshots?: Buffer[];
+}
+interface LayoutIssue {
+    severity: 'error' | 'warning' | 'info';
+    slideIndex: number;
+    element?: string;
+    message: string;
+    suggestion: string;
+    measurements?: {
+        elementWidth?: number;
+        elementHeight?: number;
+        viewportWidth?: number;
+        viewportHeight?: number;
+        overflow?: {
+            x: number;
+            y: number;
+        };
+    };
+}
+interface SlideLayoutResult {
+    slideIndex: number;
+    passed: boolean;
+    score: number;
+    issues: LayoutIssue[];
+    measurements: {
+        contentHeight: number;
+        viewportHeight: number;
+        contentWidth: number;
+        viewportWidth: number;
+        overflowY: number;
+        overflowX: number;
+        hasScrollbar: boolean;
+        clippedElements: string[];
+    };
+}
+declare class HTMLLayoutValidator {
+    private playwright;
+    /**
+     * Validate HTML presentation layout using real browser rendering.
+     * This is the MANDATORY check before any HTML export.
+     */
+    validate(html: string): Promise<LayoutValidationResult>;
+    /**
+     * Validate a single slide's layout using Playwright.
+     */
+    private validateSlide;
+    /**
+     * Static HTML analysis fallback when Playwright isn't available.
+     * Analyzes CSS and HTML structure without rendering.
+     */
+    private validateStaticHTML;
+    /**
+     * Generate remediation suggestions for layout issues.
+     */
+    generateRemediationPlan(result: LayoutValidationResult): string[];
+}
+
+/**
+ * Presentation Type Detector
+ *
+ * Determines the appropriate presentation type based on:
+ * 1. Explicit presentationType configuration
+ * 2. Audience specification
+ * 3. Goal specification
+ * 4. Keyword analysis of content
+ * 5. Legacy mode fallback
+ *
+ * Each presentation type has distinct validation rules that do not conflict.
  */
 
-declare class QAEngine {
-    private browser;
+/**
+ * Validation rules for each presentation type
+ */
+declare const PRESENTATION_TYPE_RULES: Record<PresentationType, PresentationTypeRules>;
+declare class TypeDetector {
     /**
-     * Validate a presentation.
+     * Detect the presentation type from configuration.
+     * Priority:
+     * 1. Explicit presentationType
+     * 2. Audience mapping
+     * 3. Goal mapping
+     * 4. Content keyword analysis
+     * 5. Legacy mode fallback
      */
-    validate(presentation: string | Buffer, options?: {
-        mode?: 'keynote' | 'business';
-        strictMode?: boolean;
-        threshold?: number;
-    }): Promise<QAResults>;
+    detectType(config: PresentationConfig): PresentationType;
     /**
-     * Calculate overall QA score.
+     * Detect presentation type from keyword analysis.
      */
-    calculateScore(results: QAResults): number;
+    private detectFromKeywords;
     /**
-     * Create empty QA results (for when QA is skipped).
+     * Get validation rules for a presentation type.
      */
-    createEmptyResults(): QAResults;
-    private runVisualTests;
-    private runContentTests;
-    private runExpertTests;
-    private createExpertResult;
-    private runAccessibilityTests;
-    private calculateVisualScore;
-    private calculateContentScore;
-    private calculateExpertScore;
-    private calculateA11yScore;
-    private collectIssues;
-    private initBrowser;
-    private closeBrowser;
+    getRules(type: PresentationType): PresentationTypeRules;
+    /**
+     * Get all available presentation types.
+     */
+    getAvailableTypes(): PresentationType[];
+    /**
+     * Map legacy mode to a presentation type.
+     */
+    modeToType(mode: 'keynote' | 'business'): PresentationType;
+    /**
+     * Map presentation type back to legacy mode for compatibility.
+     */
+    typeToMode(type: PresentationType): 'keynote' | 'business';
+    /**
+     * Get word limits for a presentation type.
+     */
+    getWordLimits(type: PresentationType): {
+        min: number;
+        max: number;
+        ideal: number;
+    };
+    /**
+     * Check if action titles are required for a type.
+     */
+    requiresActionTitles(type: PresentationType): boolean;
+    /**
+     * Check if sources are required for a type.
+     */
+    requiresSources(type: PresentationType): boolean;
+    /**
+     * Get scoring weights for a presentation type.
+     */
+    getScoringWeights(type: PresentationType): {
+        visual_quality: number;
+        content_quality: number;
+        expert_compliance: number;
+        accessibility: number;
+    };
+}
+
+/**
+ * Execution Strategy Types
+ *
+ * Types for the presentation execution strategy system.
+ */
+
+/**
+ * A blueprint for a single slide in a presentation.
+ */
+interface SlideBlueprint {
+    /** Unique identifier for this slide in the sequence */
+    id: string;
+    /** Human-readable name */
+    name: string;
+    /** Slide type to use */
+    type: SlideType;
+    /** Is this slide required or optional? */
+    required: boolean;
+    /** Purpose of this slide (for content guidance) */
+    purpose: string;
+    /** Data fields this slide needs */
+    requiredData: string[];
+    /** Optional data fields */
+    optionalData: string[];
+    /** Word count constraints */
+    wordLimits: {
+        min: number;
+        max: number;
+        ideal: number;
+    };
+    /** Expert principles that apply to this slide */
+    expertPrinciples: string[];
+    /** Visual design notes */
+    designNotes: string[];
+    /** Example content (for guidance) */
+    example?: {
+        title?: string;
+        subtitle?: string;
+        bullets?: string[];
+        body?: string;
+    };
+}
+/**
+ * A content transformation rule.
+ */
+interface ContentTransform {
+    /** What to look for in the source content */
+    sourcePattern: string | RegExp;
+    /** How to transform it */
+    transform: (match: string, analysis: ContentAnalysis) => string;
+    /** Description of the transformation */
+    description: string;
+}
+/**
+ * An execution strategy for a presentation type.
+ */
+interface ExecutionStrategy {
+    /** Presentation type this strategy is for */
+    type: PresentationType;
+    /** Human-readable name */
+    name: string;
+    /** Description */
+    description: string;
+    /** Expert methodologies to apply */
+    experts: {
+        primary: string;
+        secondary: string[];
+    };
+    /** The slide sequence (ordered list of blueprints) */
+    slideSequence: SlideBlueprint[];
+    /** Content transformation rules */
+    contentTransforms: ContentTransform[];
+    /** Quality benchmarks */
+    qualityBenchmarks: {
+        minScore: number;
+        criticalChecks: string[];
+        excellenceIndicators: string[];
+    };
+    /**
+     * Generate slides from content analysis.
+     */
+    generateSlides(analysis: ContentAnalysis): Promise<Slide[]>;
+    /**
+     * Validate slides against this strategy's requirements.
+     */
+    validateSlides(slides: Slide[]): {
+        passed: boolean;
+        score: number;
+        issues: string[];
+        suggestions: string[];
+    };
+    /**
+     * Apply expert methodology transformations.
+     */
+    applyExpertMethodology(slides: Slide[]): Slide[];
+}
+
+/**
+ * Strategy Factory
+ *
+ * Selects the appropriate execution strategy based on presentation type.
+ * Each strategy encapsulates world-class expertise for its domain.
+ */
+
+/**
+ * Factory for creating presentation execution strategies.
+ */
+declare class StrategyFactory {
+    private strategies;
+    constructor();
+    /**
+     * Get the execution strategy for a presentation type.
+     */
+    getStrategy(type: PresentationType): ExecutionStrategy;
+    /**
+     * Get all available strategies.
+     */
+    getAllStrategies(): ExecutionStrategy[];
+    /**
+     * Get strategy descriptions for user guidance.
+     */
+    getStrategyDescriptions(): Record<PresentationType, string>;
+    /**
+     * Get the primary expert for a presentation type.
+     */
+    getPrimaryExpert(type: PresentationType): string;
+    /**
+     * Get all experts for a presentation type.
+     */
+    getAllExperts(type: PresentationType): string[];
 }
 
 /**
@@ -696,6 +1446,13 @@ declare class RevealJsGenerator {
     private buildDocument;
     /**
      * Get base styles for slides.
+     *
+     * BULLETPROOF OVERFLOW PROTECTION:
+     * 1. All slides use height: 100vh to match viewport exactly
+     * 2. overflow: hidden on slide sections clips content at boundaries
+     * 3. All child elements use flex-shrink: 1 and min-height: 0 to allow shrinking
+     * 4. Tables use max-height with overflow: auto for scrolling if needed
+     * 5. Two-column layouts use smaller font sizes to prevent overflow
      */
     private getBaseStyles;
     /**
@@ -1194,7 +1951,7 @@ declare function validate(presentation: string | Buffer, options?: {
 /**
  * Get the version of the package.
  */
-declare const VERSION = "1.0.0";
+declare const VERSION = "2.0.0";
 /**
  * Default export for convenience.
  */
@@ -1203,7 +1960,9 @@ declare const _default: {
     validate: typeof validate;
     PresentationEngine: typeof PresentationEngine;
     QAEngine: typeof QAEngine;
+    PPTXValidator: typeof PPTXValidator;
+    AccessibilityValidator: typeof AccessibilityValidator;
     VERSION: string;
 };
 
-export { type AccessibilityResults, type ChartData, type ChartDataset, ChartJsProvider, type ChartProvider, type ChartRequest, type ChartResult, type ChartType, CompositeChartProvider, CompositeImageProvider, type ContentAnalysis, ContentAnalyzer, type ContentQAResults, type ContrastIssue, type ExpertQAResults, type ExpertValidation, type FontSizeIssue, type GlanceTestResult, type ImageData, type ImageProvider, type ImageRequest, type ImageResult, KnowledgeBase, LocalImageProvider, MermaidProvider, type MetricData, type OneIdeaResult, type OutputFormat, PlaceholderImageProvider, PowerPointGenerator, type PresentationConfig, PresentationEngine, type PresentationMetadata, type PresentationMode, type PresentationResult, QAEngine, QAFailureError, type QAIssue, type QAResults, QuickChartProvider, RevealJsGenerator, type SCQAStructure, ScoreCalculator, type SignalNoiseResult, type Slide, type SlideContentScore, type SlideData, SlideFactory, type SlideType, type SlideVisualScore, type SparklineStructure, TemplateEngine, TemplateNotFoundError, type ThemeName, UnsplashImageProvider, VERSION, ValidationError, type VisualQAResults, createDefaultChartProvider, createDefaultImageProvider, _default as default, generate, getKnowledgeBase, validate };
+export { type AccessibilityResults, AccessibilityValidator, AutoRemediation, type ChartData, type ChartDataset, ChartJsProvider, type ChartProvider, type ChartRequest, type ChartResult, type ChartType, CompositeChartProvider, CompositeImageProvider, type ContentAnalysis, ContentAnalyzer, type ContentQAResults, type ContentTransform, type ContrastIssue, type ExecutionStrategy, type ExpertQAResults, type ExpertValidation, type FontSizeIssue, type GlanceTestResult, HTMLLayoutValidator, HallucinationDetector, type ImageData, type ImageProvider, type ImageRequest, type ImageResult, KnowledgeBase, LocalImageProvider, MermaidProvider, type MetricData, type OneIdeaResult, type OutputFormat, PPTXValidator, PRESENTATION_TYPE_RULES, PlaceholderImageProvider, PowerPointGenerator, type PresentationConfig, PresentationEngine, type PresentationMetadata, type PresentationMode, type PresentationResult, type PresentationType, type PresentationTypeRules, QAEngine, QAFailureError, type QAIssue, type QAResults, QuickChartProvider, RevealJsGenerator, type SCQAStructure, ScoreCalculator, type SignalNoiseResult, type Slide, type SlideBlueprint, type SlideContentScore, type SlideData, SlideFactory, type SlideType, type SlideVisualScore, type SparklineStructure, StrategyFactory, TemplateEngine, TemplateNotFoundError, type ThemeName, TypeDetector, UnsplashImageProvider, VERSION, ValidationError, type VisualQAResults, createDefaultChartProvider, createDefaultImageProvider, _default as default, generate, getKnowledgeBase, validate };

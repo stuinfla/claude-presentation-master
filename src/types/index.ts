@@ -7,7 +7,26 @@
 // PRESENTATION CONFIGURATION
 // =============================================================================
 
+/**
+ * Legacy presentation mode (for backwards compatibility)
+ * @deprecated Use PresentationType for granular control
+ */
 export type PresentationMode = 'keynote' | 'business';
+
+/**
+ * Granular presentation types with distinct validation rules.
+ * Each type is a "swim lane" with its own word limits, expert methodologies,
+ * and scoring weights. These are mutually exclusive.
+ */
+export type PresentationType =
+  | 'ted_keynote'           // TED-style inspirational (1-15 words/slide)
+  | 'sales_pitch'           // Persuasive sales deck (10-30 words/slide)
+  | 'consulting_deck'       // McKinsey/BCG style (40-80 words/slide)
+  | 'investment_banking'    // Financial pitch books (50-120 words/slide)
+  | 'investor_pitch'        // VC fundraising (20-50 words/slide)
+  | 'technical_presentation' // Engineering audiences (40-100 words/slide)
+  | 'all_hands';            // Company updates (15-40 words/slide)
+
 export type OutputFormat = 'html' | 'pptx';
 export type ThemeName = 'default' | 'light-corporate' | 'modern-tech' | 'minimal' | 'warm' | 'creative';
 
@@ -16,8 +35,20 @@ export interface PresentationConfig {
   content: string;
   /** Content format */
   contentType: 'markdown' | 'json' | 'yaml' | 'text';
-  /** Presentation mode: keynote (6-25 words/slide) or business (40-80 words/slide) */
+  /**
+   * Legacy presentation mode (backwards compatible)
+   * @deprecated Use `presentationType` for granular control
+   */
   mode: PresentationMode;
+  /**
+   * Granular presentation type with distinct validation rules.
+   * If specified, this overrides `mode` for validation purposes.
+   */
+  presentationType?: PresentationType;
+  /** Target audience (used for auto-detecting presentation type) */
+  audience?: 'board_of_directors' | 'sales_prospect' | 'investors_vcs' | 'general_audience_keynote' | 'technical_team' | 'all_hands_meeting';
+  /** Presentation goal (used for auto-detecting presentation type) */
+  goal?: 'get_approval' | 'inform_educate' | 'persuade_sell' | 'inspire_motivate' | 'report_results' | 'raise_funding';
   /** Output formats to generate */
   format: OutputFormat[];
   /** Visual theme */
@@ -40,6 +71,37 @@ export interface PresentationConfig {
   customCSS?: string;
   /** Custom Handlebars templates */
   customTemplates?: Record<string, string>;
+}
+
+/**
+ * Validation rules specific to a presentation type.
+ * Loaded from the knowledge base.
+ */
+export interface PresentationTypeRules {
+  id: PresentationType;
+  name: string;
+  description: string;
+  wordsPerSlide: {
+    min: number;
+    max: number;
+    ideal: number;
+  };
+  whitespace: {
+    min: number;
+    ideal: number;
+    max?: number;
+  };
+  bulletsPerSlide: {
+    max: number;
+  };
+  actionTitlesRequired: boolean;
+  sourcesRequired: boolean;
+  scoringWeights: {
+    visual_quality: number;
+    content_quality: number;
+    expert_compliance: number;
+    accessibility: number;
+  };
 }
 
 // =============================================================================

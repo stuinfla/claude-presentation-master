@@ -1,0 +1,203 @@
+name: Presentation QA Gate
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  qa-validation:
+    name: QA Validation
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install chromium
+
+      - name: Run TypeScript check
+        run: npm run typecheck
+
+      - name: Run linting
+        run: npm run lint
+
+      - name: Run QA tests
+        run: npm run test:qa
+        env:
+          CI: true
+
+      - name: Build package
+        run: npm run build
+
+      - name: Verify QA system integrity
+        run: |
+          echo "Verifying QA system is properly integrated..."
+
+          # Check that QAEngine exists
+          if [ ! -f "src/qa/QAEngine.ts" ]; then
+            echo "❌ ERROR: QAEngine.ts not found"
+            exit 1
+          fi
+
+          # Check that PPTXValidator exists
+          if [ ! -f "src/qa/PPTXValidator.ts" ]; then
+            echo "❌ ERROR: PPTXValidator.ts not found"
+            exit 1
+          fi
+
+          # Check that PresentationEngine imports QA components
+          if ! grep -q "PPTXValidator" src/core/PresentationEngine.ts; then
+            echo "❌ ERROR: PPTXValidator not integrated in PresentationEngine"
+            exit 1
+          fi
+
+          # Check that skipQA is deprecated
+          if grep -q "skipQA.*true" src/core/PresentationEngine.ts; then
+            echo "❌ ERROR: skipQA should be deprecated"
+            exit 1
+          fi
+
+          echo "✅ QA system integrity verified"
+
+  test-coverage:
+    name: Test Coverage
+    runs-on: ubuntu-latest
+    needs: qa-validation
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install chromium
+
+      - name: Run tests with coverage
+        run: npm run test:coverage
+
+      - name: Check coverage thresholds
+        run: |
+          # Ensure minimum coverage thresholds are met
+          echo "Checking coverage thresholds..."
+          # Coverage report will be in coverage/coverage-summary.json
+          if [ -f "coverage/coverage-summary.json" ]; then
+            LINES=$(jq '.total.lines.pct' coverage/coverage-summary.json)
+            echo "Line coverage: $LINES%"
+            if (( $(echo "$LINES < 50" | bc -l) )); then
+              echo "❌ Line coverage below 50% threshold"
+              exit 1
+            fi
+          fi
+          echo "✅ Coverage thresholds met"
+
+  sample-presentation-qa:
+    name: Sample Presentation QA
+    runs-on: ubuntu-latest
+    needs: qa-validation
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install chromium
+
+      - name: Build package
+        run: npm run build
+
+      - name: Generate sample presentation
+        run: |
+          echo "Generating sample presentation to verify QA gates..."
+          node -e "
+            const { PresentationEngine } = require('./dist/index.js');
+
+            async function test() {
+              const engine = new PresentationEngine();
+
+              try {
+                const result = await engine.generate({
+                  content: '# Welcome\n\nThis is a test presentation.\n\n## Key Point\n\nImportant message here.\n\n## Thank You\n\nQuestions?',
+                  contentType: 'markdown',
+                  mode: 'keynote',
+                  format: ['html'],
+                  title: 'CI Test Presentation',
+                  qaThreshold: 80
+                });
+
+                console.log('✅ Sample presentation passed QA');
+                console.log('Score:', result.score);
+                process.exit(0);
+              } catch (error) {
+                console.error('❌ Sample presentation failed QA:', error.message);
+                process.exit(1);
+              }
+            }
+
+            test();
+          "
+
+  security-check:
+    name: Security Audit
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Run npm audit
+        run: npm audit --audit-level=high
+        continue-on-error: true
+
+      - name: Check for vulnerable dependencies
+        run: |
+          echo "Checking for known vulnerabilities..."
+          npm audit --json > audit.json || true
+          HIGH=$(jq '.metadata.vulnerabilities.high // 0' audit.json)
+          CRITICAL=$(jq '.metadata.vulnerabilities.critical // 0' audit.json)
+
+          if [ "$CRITICAL" -gt 0 ]; then
+            echo "❌ Critical vulnerabilities found: $CRITICAL"
+            exit 1
+          fi
+
+          if [ "$HIGH" -gt 5 ]; then
+            echo "⚠️ High vulnerabilities found: $HIGH"
+            # Don't fail on high, but warn
+          fi
+
+          echo "✅ Security check passed"

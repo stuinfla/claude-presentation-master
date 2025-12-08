@@ -248,6 +248,7 @@
 
 .reveal .slides section {
   height: 100% !important;
+  max-height: 100% !important;
   padding: var(--slide-padding-y) var(--slide-padding-x) !important;
   padding-top: calc(var(--slide-padding-y) + var(--safe-area-top)) !important;
   padding-right: calc(var(--slide-padding-x) + var(--safe-area-right)) !important;
@@ -259,6 +260,21 @@
   justify-content: flex-start !important;
   align-items: stretch !important;
   background: var(--color-bg-primary);
+  overflow: hidden !important;
+}
+
+/* CRITICAL: Content overflow protection */
+.reveal .slides section > * {
+  flex-shrink: 1;
+  min-height: 0;
+}
+
+.reveal .slides section .slide-content {
+  flex: 1 1 auto;
+  overflow: hidden;
+  max-height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .reveal h1,

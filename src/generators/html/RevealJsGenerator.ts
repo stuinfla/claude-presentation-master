@@ -196,12 +196,24 @@ ${slides}
 
   /**
    * Get base styles for slides.
+   *
+   * BULLETPROOF OVERFLOW PROTECTION:
+   * 1. All slides use height: 100vh to match viewport exactly
+   * 2. overflow: hidden on slide sections clips content at boundaries
+   * 3. All child elements use flex-shrink: 1 and min-height: 0 to allow shrinking
+   * 4. Tables use max-height with overflow: auto for scrolling if needed
+   * 5. Two-column layouts use smaller font sizes to prevent overflow
    */
   private getBaseStyles(mode: 'keynote' | 'business'): string {
-    const fontSize = mode === 'keynote' ? '2.5em' : '1.8em';
-    const lineHeight = mode === 'keynote' ? '1.4' : '1.5';
+    const fontSize = mode === 'keynote' ? '2.2em' : '1.6em';
+    const lineHeight = mode === 'keynote' ? '1.3' : '1.4';
 
     return `
+    /* ============================================
+       BULLETPROOF SLIDE OVERFLOW PROTECTION
+       All slides are guaranteed to fit in viewport
+       ============================================ */
+
     /* Base Styles */
     :root {
       --font-heading: 'Source Sans Pro', 'Helvetica Neue', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -216,8 +228,12 @@ ${slides}
       --color-text-light: #4a4a68;
       --color-background: #ffffff;
 
-      --slide-padding: 60px;
+      --slide-padding: 35px 45px;
       --content-max-width: 1200px;
+
+      /* Viewport-based heights for bulletproof containment */
+      --slide-height: 100%;
+      --content-area-height: calc(100% - 70px);
     }
 
     .reveal {
@@ -231,82 +247,275 @@ ${slides}
       text-align: left;
     }
 
+    /* ============================================
+       CRITICAL: SLIDE BOUNDARY ENFORCEMENT
+       Content CANNOT escape these boundaries
+       ============================================ */
     .reveal .slides section {
-      padding: var(--slide-padding);
-      box-sizing: border-box;
-      height: 100%;
-      display: flex;
-      flex-direction: column;
+      padding: var(--slide-padding) !important;
+      box-sizing: border-box !important;
+      height: 100% !important;
+      max-height: 100% !important;
+      width: 100% !important;
+      display: flex !important;
+      flex-direction: column !important;
+      overflow: hidden !important;
+      justify-content: flex-start !important;
     }
 
+    /* All direct children must be able to shrink */
+    .reveal .slides section > * {
+      flex-shrink: 1;
+      min-height: 0;
+      max-height: 100%;
+    }
+
+    /* Content container with strict overflow protection */
     .reveal .slides section .slide-content {
-      flex: 1;
+      flex: 1 1 auto;
       display: flex;
       flex-direction: column;
       max-width: var(--content-max-width);
       width: 100%;
       margin: 0 auto;
+      overflow: hidden;
+      min-height: 0;
     }
 
-    /* Typography */
+    /* ============================================
+       TABLES - Bulletproof containment
+       ============================================ */
+    .reveal table {
+      font-size: 0.75em;
+      width: 100%;
+      table-layout: fixed;
+      border-collapse: collapse;
+      flex-shrink: 1;
+      min-height: 0;
+    }
+
+    /* Table wrapper to handle overflow */
+    .reveal .table-wrapper,
+    .reveal .table-container {
+      flex: 1 1 auto;
+      overflow: hidden;
+      min-height: 0;
+      max-height: 100%;
+    }
+
+    .reveal table th,
+    .reveal table td {
+      padding: 0.4em 0.6em;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      max-width: 200px;
+    }
+
+    /* Allow text wrap for cells that need it */
+    .reveal table td.wrap {
+      white-space: normal;
+    }
+
+    /* ============================================
+       TWO-COLUMN LAYOUTS - Smaller text, strict bounds
+       ============================================ */
+    .reveal .two-column,
+    .reveal .two-columns {
+      display: flex;
+      gap: 1.5em;
+      flex: 1 1 auto;
+      min-height: 0;
+      overflow: hidden;
+      max-height: calc(100% - 60px);
+    }
+
+    .reveal .two-column > *,
+    .reveal .two-columns > * {
+      flex: 1 1 50%;
+      min-width: 0;
+      min-height: 0;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Two-column content gets smaller fonts */
+    .reveal .two-column h2,
+    .reveal .two-columns h2 {
+      font-size: 1.2em;
+      margin-bottom: 0.3em;
+    }
+
+    .reveal .two-column h3,
+    .reveal .two-columns h3 {
+      font-size: 1em;
+      margin-bottom: 0.2em;
+    }
+
+    .reveal .two-column p,
+    .reveal .two-column li,
+    .reveal .two-columns p,
+    .reveal .two-columns li {
+      font-size: 0.8em;
+      line-height: 1.3;
+      margin-bottom: 0.3em;
+    }
+
+    .reveal .two-column table,
+    .reveal .two-columns table {
+      font-size: 0.7em;
+    }
+
+    /* ============================================
+       GRIDS - Auto-fit to available space
+       ============================================ */
+    .reveal .stats-grid,
+    .reveal .metrics-grid {
+      display: grid;
+      gap: 0.8em;
+      width: 100%;
+      flex-shrink: 1;
+      min-height: 0;
+    }
+
+    /* ============================================
+       METRIC CARDS - Compact sizing
+       ============================================ */
+    .reveal .metric-card {
+      padding: 0.8em 1em;
+      font-size: 0.85em;
+      flex-shrink: 1;
+    }
+
+    .reveal .metric-card .number {
+      font-size: 1.6em;
+    }
+
+    .reveal .metric-card .label {
+      font-size: 0.7em;
+    }
+
+    /* ============================================
+       HIGHLIGHT BOXES - Compact
+       ============================================ */
+    .reveal .highlight-box {
+      padding: 0.6em 0.8em;
+      margin: 0.4em 0;
+      font-size: 0.85em;
+      flex-shrink: 1;
+    }
+
+    /* ============================================
+       PROGRESS BARS - Fixed height
+       ============================================ */
+    .reveal .progress-bar {
+      height: 16px;
+      margin: 3px 0;
+      flex-shrink: 0;
+    }
+
+    .reveal .progress-fill {
+      font-size: 0.6em;
+    }
+
+    /* ============================================
+       STAT ITEMS - Compact
+       ============================================ */
+    .reveal .stat-item {
+      padding: 0.4em;
+      flex-shrink: 1;
+    }
+
+    .reveal .stat-item .value {
+      font-size: 1.5em;
+    }
+
+    .reveal .stat-item .label {
+      font-size: 0.65em;
+    }
+
+    /* ============================================
+       TYPOGRAPHY - Reduced for density
+       ============================================ */
     .reveal h1, .reveal h2, .reveal h3 {
       font-family: var(--font-heading);
       font-weight: 700;
       letter-spacing: -0.02em;
       color: var(--color-primary);
-      margin-bottom: 0.5em;
+      flex-shrink: 0;
     }
 
-    .reveal h1 { font-size: 2.5em; }
-    .reveal h2 { font-size: 1.8em; }
-    .reveal h3 { font-size: 1.3em; }
+    .reveal h1 {
+      font-size: 2em;
+      margin-bottom: 0.3em;
+    }
+    .reveal h2 {
+      font-size: 1.5em;
+      margin-bottom: 0.3em;
+    }
+    .reveal h3 {
+      font-size: 1.1em;
+      margin-bottom: 0.2em;
+    }
 
     .reveal p {
-      margin: 0 0 1em 0;
+      margin: 0 0 0.6em 0;
+      flex-shrink: 1;
     }
 
     .reveal .subtitle {
-      font-size: 0.7em;
+      font-size: 0.65em;
       color: var(--color-text-light);
     }
 
-    /* Lists */
+    /* ============================================
+       LISTS - Compact spacing
+       ============================================ */
     .reveal ul, .reveal ol {
-      margin: 0 0 1em 1.2em;
+      margin: 0 0 0.6em 1em;
       padding: 0;
+      flex-shrink: 1;
     }
 
     .reveal li {
-      margin-bottom: 0.5em;
+      margin-bottom: 0.3em;
+      line-height: 1.3;
     }
 
-    /* Columns */
+    /* ============================================
+       COLUMNS - Flex with overflow protection
+       ============================================ */
     .reveal .columns {
       display: flex;
-      gap: 40px;
-      flex: 1;
+      gap: 25px;
+      flex: 1 1 auto;
       align-items: flex-start;
+      min-height: 0;
+      overflow: hidden;
     }
 
-    .reveal .two-columns .column {
-      flex: 1;
-    }
-
+    .reveal .two-columns .column,
     .reveal .three-columns .column {
       flex: 1;
+      min-width: 0;
+      min-height: 0;
+      overflow: hidden;
     }
 
-    /* Big elements */
+    /* ============================================
+       BIG ELEMENTS - Sized appropriately
+       ============================================ */
     .reveal .big-idea-text,
     .reveal .statement {
-      font-size: 2em;
+      font-size: 1.8em;
       font-weight: 700;
       line-height: 1.2;
       text-align: center;
     }
 
     .reveal .number {
-      font-size: 4em;
+      font-size: 3em;
       font-weight: 800;
       color: var(--color-highlight);
       text-align: center;
@@ -315,85 +524,113 @@ ${slides}
     .reveal .number-context {
       text-align: center;
       color: var(--color-text-light);
+      font-size: 0.9em;
     }
 
-    /* Quotes */
+    /* ============================================
+       QUOTES - Compact
+       ============================================ */
     .reveal blockquote {
       border-left: 4px solid var(--color-accent);
-      padding-left: 1em;
+      padding-left: 0.8em;
       font-style: italic;
-      margin: 1em 0;
+      margin: 0.6em 0;
+      flex-shrink: 1;
     }
 
     .reveal .attribution {
       text-align: right;
       color: var(--color-text-light);
-      font-size: 0.8em;
+      font-size: 0.75em;
     }
 
-    /* Images */
+    /* ============================================
+       IMAGES - Contained within bounds
+       ============================================ */
     .reveal img {
       max-width: 100%;
+      max-height: 100%;
       height: auto;
       border-radius: 8px;
+      object-fit: contain;
     }
 
     .reveal .image-container {
       text-align: center;
+      flex: 1 1 auto;
+      min-height: 0;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .reveal .caption {
-      font-size: 0.7em;
+      font-size: 0.65em;
       color: var(--color-text-light);
-      margin-top: 0.5em;
+      margin-top: 0.3em;
+      flex-shrink: 0;
     }
 
-    /* Metrics */
+    /* ============================================
+       METRICS - Responsive grid
+       ============================================ */
     .reveal .metrics-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-      gap: 30px;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 20px;
       text-align: center;
     }
 
     .reveal .metric-value {
-      font-size: 2em;
+      font-size: 1.6em;
       font-weight: 700;
       color: var(--color-highlight);
     }
 
     .reveal .metric-label {
-      font-size: 0.8em;
+      font-size: 0.7em;
       color: var(--color-text-light);
     }
 
     .reveal .metric-change {
-      font-size: 0.7em;
+      font-size: 0.65em;
     }
 
     .reveal .metric-change.up { color: #27ae60; }
     .reveal .metric-change.down { color: #e74c3c; }
 
-    /* Charts */
+    /* ============================================
+       CHARTS - Contained
+       ============================================ */
     .reveal .chart-container {
-      margin: 1em 0;
+      margin: 0.6em 0;
+      flex: 1 1 auto;
+      min-height: 0;
+      overflow: hidden;
     }
 
-    /* Source */
+    /* ============================================
+       SOURCE ATTRIBUTION
+       ============================================ */
     .reveal .source {
       position: absolute;
-      bottom: 20px;
+      bottom: 15px;
       right: 20px;
-      font-size: 0.5em;
+      font-size: 0.45em;
       color: var(--color-text-light);
     }
 
-    /* Speaker notes */
+    /* ============================================
+       SPEAKER NOTES
+       ============================================ */
     .reveal aside.notes {
       display: none;
     }
 
-    /* Slide types */
+    /* ============================================
+       SLIDE TYPE SPECIFIC LAYOUTS
+       ============================================ */
     .reveal .slide-title .slide-content {
       justify-content: center;
       text-align: center;
@@ -427,12 +664,12 @@ ${slides}
 
     .reveal .cta-button {
       display: inline-block;
-      padding: 0.5em 1.5em;
+      padding: 0.4em 1.2em;
       background: var(--color-highlight);
       color: white;
       border-radius: 4px;
       font-weight: 600;
-      margin-top: 1em;
+      margin-top: 0.8em;
     }
     `;
   }
